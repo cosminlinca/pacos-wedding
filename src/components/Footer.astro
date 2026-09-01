@@ -1,0 +1,66 @@
+---
+import type { Locale } from '../lib/i18n';
+import LangToggle from './LangToggle.astro';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+
+const { locale, t } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p class="site-footer__line">
+      <span class="site-footer__monogram">{t('footer.monogram')}</span>
+      <span class="site-footer__dot" aria-hidden="true">·</span>
+      <span>{t('footer.date')}</span>
+      <span class="site-footer__dot" aria-hidden="true">·</span>
+      <span>{t('footer.place')}</span>
+    </p>
+    <p class="site-footer__note">{t('footer.note')}</p>
+    <LangToggle locale={locale} t={t} />
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: clamp(2.5rem, 1.5rem + 6vw, 4.5rem);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .site-footer__line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.6em;
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-size: var(--step-0);
+    letter-spacing: 0.06em;
+    color: var(--ink);
+  }
+
+  .site-footer__monogram {
+    letter-spacing: 0.14em;
+    color: var(--accent-ink);
+  }
+
+  .site-footer__dot {
+    color: var(--brass);
+  }
+
+  .site-footer__note {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+</style>

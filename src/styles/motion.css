@@ -1,0 +1,99 @@
+/*
+ * Motion — editorial and subtle. Every effect is opt-in via
+ * `prefers-reduced-motion: no-preference`; with reduced motion the page is
+ * fully static and all content is visible.
+ */
+
+/* Reveal-on-scroll: elements start hidden only when motion is allowed AND JS
+   marks the document ready. Without JS (`.no-js`) nothing is hidden. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity var(--reveal-duration) var(--ease-editorial),
+      transform var(--reveal-duration) var(--ease-editorial);
+    transition-delay: calc(var(--reveal-index, 0) * var(--reveal-stagger));
+    will-change: opacity, transform;
+  }
+
+  html.js [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Scroll cue bob. */
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-cue__chevron {
+    animation: cue-bob 1.8s var(--ease-editorial) infinite;
+  }
+}
+
+@keyframes cue-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* Ken Burns on the hero placeholder / photo. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__media-inner {
+    animation: ken-burns 24s ease-in-out alternate infinite;
+  }
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.06) translate3d(-1.5%, -1%, 0);
+  }
+}
+
+/* Hero background parallax — JS-free, only where the scroll timeline is
+   supported. No-op everywhere else. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__media {
+      animation: hero-parallax linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+  }
+}
+
+@keyframes hero-parallax {
+  to {
+    transform: translateY(8%);
+  }
+}
+
+/* Countdown digit cross-fade (class toggled from the countdown script). */
+.countdown__value {
+  transition: opacity 220ms var(--ease-editorial);
+}
+
+.countdown__value.is-swapping {
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdown__value {
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

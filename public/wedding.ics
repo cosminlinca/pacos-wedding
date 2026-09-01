@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//pacos-wedding//save-the-date teaser//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:patricia-cosmin-2027-08-21@cosminlinca.github.io
+DTSTAMP:20260901T000000Z
+DTSTART;VALUE=DATE:20270821
+DTEND;VALUE=DATE:20270822
+SUMMARY:Patricia & Cosmin’s wedding
+DESCRIPTION:Save the date. A formal invitation will follow.\nDetails: https
+ ://cosminlinca.github.io/pacos-wedding/
+LOCATION:Wonderland - Sala Riviera\, Cluj-Napoca
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

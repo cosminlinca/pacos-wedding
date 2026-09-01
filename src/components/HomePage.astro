@@ -1,0 +1,26 @@
+---
+import type { Locale } from '../lib/i18n';
+import { getStrings } from '../lib/i18n';
+import Base from '../layouts/Base.astro';
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import SaveTheDate from './SaveTheDate.astro';
+import Footer from './Footer.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getStrings(locale);
+
+// Flip to `true` to keep the teaser out of search indexes.
+const NOINDEX = false;
+---
+
+<Base locale={locale} t={t} noindex={NOINDEX}>
+  <Header slot="header" locale={locale} t={t} />
+  <Hero locale={locale} t={t} />
+  <SaveTheDate locale={locale} t={t} />
+  <Footer slot="footer" locale={locale} t={t} />
+</Base>

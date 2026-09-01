@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="P &amp; C">
+  <rect width="32" height="32" rx="7" fill="#2F3D33"/>
+  <rect x="1.25" y="1.25" width="29.5" height="29.5" rx="6" fill="none" stroke="#9A7B4F" stroke-width="1"/>
+  <text x="16" y="17" fill="#F6F1E7" font-family="Georgia, 'Times New Roman', 'Playfair Display', serif"
+        font-size="17" font-style="italic" text-anchor="middle" dominant-baseline="central">&amp;</text>
+  <text x="16" y="26.5" fill="#C8B48F" font-family="Georgia, 'Times New Roman', serif"
+        font-size="7" letter-spacing="1.5" text-anchor="middle" dominant-baseline="central">P&#160;C</text>
+</svg>

@@ -1,0 +1,163 @@
+---
+import type { Locale } from '../lib/i18n';
+import { remainingUntilWedding } from '../lib/datetime';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+
+// Build-time snapshot — replaced within a frame by the client script.
+const snap = remainingUntilWedding();
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const units = [
+  { key: 'days', value: String(snap.days), label: t('countdown.days') },
+  { key: 'hours', value: pad(snap.hours), label: t('countdown.hours') },
+  { key: 'minutes', value: pad(snap.minutes), label: t('countdown.minutes') },
+  { key: 'seconds', value: pad(snap.seconds), label: t('countdown.seconds') },
+];
+---
+
+<section class="countdown" aria-labelledby="countdown-heading">
+  <h2 id="countdown-heading" class="eyebrow countdown__heading">
+    {t('countdown.heading')}
+  </h2>
+
+  <ol class="countdown__list" data-countdown aria-hidden="true">
+    {
+      units.map((u) => (
+        <li class="countdown__unit">
+          <span class="countdown__value" data-unit={u.key}>
+            {u.value}
+          </span>
+          <span class="countdown__label">{u.label}</span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <p class="countdown__fallback">{t('countdown.fallback')}</p>
+</section>
+
+<style>
+  .countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .countdown__heading {
+    margin: 0;
+  }
+
+  .countdown__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(3.5rem, 1fr));
+    gap: clamp(0.75rem, 0.4rem + 2vw, 2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .countdown__value {
+    font-family: var(--font-body);
+    font-size: var(--step-2);
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+    color: var(--accent-ink);
+    /* Fixed-width cell so 2→3 digit changes never shift layout. */
+    min-width: 2ch;
+  }
+
+  .countdown__unit:first-child .countdown__value {
+    min-width: 3ch;
+  }
+
+  .countdown__label {
+    font-size: var(--step--1);
+    letter-spacing: 0.16em;
+    text-transform: lowercase;
+    color: var(--ink-soft);
+  }
+
+  .countdown__fallback {
+    display: none;
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+  }
+
+  /* JS-off degradation: hide the live grid, show the static month. */
+  :global(html.no-js) .countdown__list {
+    display: none;
+  }
+
+  :global(html.no-js) .countdown__fallback {
+    display: block;
+  }
+</style>
+
+<script>
+  import { remainingUntilWedding } from '../lib/datetime';
+
+  const root = document.querySelector<HTMLElement>('[data-countdown]');
+  if (root) {
+    const cells = new Map<string, HTMLElement>();
+    root.querySelectorAll<HTMLElement>('[data-unit]').forEach((el) => {
+      if (el.dataset.unit) cells.set(el.dataset.unit, el);
+    });
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    const write = (el: HTMLElement, next: string) => {
+      if (el.textContent === next) return;
+      el.textContent = next;
+      if (reduceMotion) return;
+      el.classList.add('is-swapping');
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => el.classList.remove('is-swapping'))
+      );
+    };
+
+    const tick = () => {
+      const r = remainingUntilWedding(new Date());
+      const now: Record<string, string> = {
+        days: String(r.days),
+        hours: pad(r.hours),
+        minutes: pad(r.minutes),
+        seconds: pad(r.seconds),
+      };
+      for (const [unit, el] of cells)
+        write(el, now[unit] ?? el.textContent ?? '');
+    };
+
+    const loop = () => {
+      tick();
+      // Re-align to the next whole second to avoid drift / double updates.
+      window.setTimeout(loop, 1000 - (Date.now() % 1000));
+    };
+
+    loop();
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') tick();
+    });
+  }
+</script>

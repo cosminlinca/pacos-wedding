@@ -1,0 +1,54 @@
+---
+import type { Locale } from '../lib/i18n';
+import { switchLocalePath, OTHER_LOCALE } from '../lib/i18n';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+
+const { locale, t } = Astro.props;
+const other = OTHER_LOCALE[locale];
+const otherHref = switchLocalePath(Astro.url, other);
+const switchLabel = locale === 'ro' ? t('nav.switchToEn') : t('nav.switchToRo');
+---
+
+<nav class="lang" aria-label={t('nav.langLabel')}>
+  <span class="lang__current" aria-current="true">{t(`nav.${locale}`)}</span>
+  <span class="lang__sep" aria-hidden="true">/</span>
+  <a class="lang__other" href={otherHref} hreflang={other} rel="alternate">
+    <span aria-hidden="true">{t(`nav.${other}`)}</span>
+    <span class="visually-hidden">{switchLabel}</span>
+  </a>
+</nav>
+
+<style>
+  .lang {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4em;
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+
+  .lang__current {
+    color: var(--ink);
+  }
+
+  .lang__sep {
+    color: var(--brass);
+  }
+
+  .lang__other {
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 160ms var(--ease-editorial);
+  }
+
+  .lang__other:hover,
+  .lang__other:focus-visible {
+    color: var(--accent-ink);
+  }
+</style>

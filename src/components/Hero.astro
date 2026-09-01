@@ -1,0 +1,187 @@
+---
+import type { Locale } from '../lib/i18n';
+import { formatWeddingDate } from '../lib/datetime';
+import Figure from './Figure.astro';
+import Countdown from './Countdown.astro';
+import AddToCalendar from './AddToCalendar.astro';
+import ScrollCue from './ScrollCue.astro';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+
+const { locale, t } = Astro.props;
+const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
+---
+
+<section class="hero" aria-labelledby="couple">
+  <div class="hero__media" aria-hidden="true">
+    <div class="hero__media-inner">
+      <Figure fill monogram="P & C" />
+    </div>
+    <div class="hero__scrim"></div>
+  </div>
+
+  <div class="container hero__content">
+    <p class="eyebrow hero__eyebrow" data-reveal style="--reveal-index: 0">
+      {t('hero.eyebrow')}
+    </p>
+
+    <h1 class="hero__names" id="couple" data-reveal style="--reveal-index: 1">
+      <span class="hero__name">{t('hero.nameA')}</span>
+      <span class="hero__pair">
+        <span class="hero__amp">{t('hero.and')}</span>
+        <span class="hero__name">{t('hero.nameB')}</span>
+      </span>
+    </h1>
+
+    <div class="hero__meta" data-reveal style="--reveal-index: 2">
+      <p class="hero__date">{t('hero.date')}</p>
+      <hr class="rule" />
+      <p class="hero__place">{t('hero.place')}</p>
+      <p class="hero__sentence">{dateSentence}</p>
+    </div>
+
+    <div class="hero__countdown" data-reveal style="--reveal-index: 3">
+      <Countdown locale={locale} t={t} />
+    </div>
+
+    <div class="hero__cta" data-reveal style="--reveal-index: 4">
+      <AddToCalendar locale={locale} t={t} />
+    </div>
+  </div>
+
+  <div class="hero__cue">
+    <ScrollCue t={t} />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding-block: clamp(5.5rem, 3.5rem + 10vh, 8rem)
+      clamp(4rem, 2.5rem + 7vh, 6rem);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+
+  .hero__media-inner {
+    position: absolute;
+    inset: -4% -4% -8% -4%;
+    will-change: transform;
+  }
+
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      90% 70% at 50% 42%,
+      rgb(var(--bg-rgb) / 0.35),
+      rgb(var(--bg-rgb) / 0.72) 70%,
+      rgb(var(--bg-rgb) / 0.9) 100%
+    );
+  }
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1.35rem, 1rem + 2vw, 2.25rem);
+    text-align: center;
+  }
+
+  .hero__eyebrow {
+    margin: 0;
+  }
+
+  .hero__names {
+    margin: 0;
+    font-optical-sizing: auto;
+    font-variation-settings:
+      'SOFT' 40,
+      'WONK' 1,
+      'opsz' 144;
+    font-size: var(--step-4);
+    font-weight: 380;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.08em 0.28em;
+  }
+
+  /* Keeps the break as "Patricia" / "& Cosmin" — the ampersand never orphans. */
+  .hero__pair {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.28em;
+    white-space: nowrap;
+  }
+
+  .hero__amp {
+    font-style: italic;
+    font-variation-settings:
+      'SOFT' 60,
+      'WONK' 1,
+      'opsz' 144;
+    color: var(--accent);
+  }
+
+  .hero__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .hero__date {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-size: var(--step-2);
+    font-weight: 400;
+    color: var(--accent-ink);
+  }
+
+  .hero__place {
+    font-size: var(--step-0);
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+
+  .hero__sentence {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+
+  .hero__cue {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(1.25rem, 0.5rem + 3vh, 2.5rem);
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+  @media (max-width: 22rem) {
+    .hero__names {
+      flex-direction: column;
+      gap: 0.05em;
+    }
+
+    .hero__pair {
+      justify-content: center;
+    }
+  }
+</style>

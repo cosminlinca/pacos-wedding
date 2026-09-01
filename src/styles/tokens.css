@@ -1,0 +1,60 @@
+/*
+ * Design tokens — Lane A, warm editorial.
+ * Light only for the teaser; a dark variant slots in under a media query or
+ * [data-theme="dark"] later without touching component CSS.
+ */
+
+:root {
+  /* ---- colour ---- */
+  --bg: #f6f1e7; /* warm ivory */
+  --bg-sink: #efe7d7; /* slightly deeper panel */
+  --ink: #23231f; /* near-black text */
+  --ink-soft: #5a564c; /* secondary text */
+  --accent: #2f3d33; /* forest green — swap here for oxblood / cocoa */
+  --accent-ink: #1e2721; /* darker green for text on ivory */
+  --brass: #9a7b4f; /* hairlines, small caps, dividers */
+  --brass-soft: #c8b48f; /* faint rules, monogram watermark */
+  --focus: #2f6fed; /* focus ring — not part of the palette */
+
+  --bg-rgb: 246 241 231;
+  --accent-rgb: 47 61 51;
+
+  /* ---- type families ---- */
+  --font-display:
+    'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body:
+    'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
+    sans-serif;
+
+  /* ---- fluid type scale ---- */
+  --step--1: clamp(0.83rem, 0.8rem + 0.2vw, 0.95rem);
+  --step-0: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  --step-1: clamp(1.3rem, 1.1rem + 1vw, 1.75rem);
+  --step-2: clamp(1.8rem, 1.3rem + 2.5vw, 3rem);
+  --step-3: clamp(2.6rem, 1.6rem + 5vw, 5.5rem);
+  --step-4: clamp(3.4rem, 1.8rem + 9vw, 9rem); /* names */
+
+  /* ---- spacing (8px scale) ---- */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6.5rem;
+
+  /* ---- structure ---- */
+  --measure: 62ch;
+  --container: min(92vw, 68rem);
+  --radius: 2px;
+  --rule: 1px solid var(--brass);
+  --hairline: 1px solid var(--brass-soft);
+
+  /* ---- motion ---- */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --reveal-duration: 640ms;
+  --reveal-stagger: 60ms;
+
+  color-scheme: light;
+}
