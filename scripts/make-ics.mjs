@@ -24,7 +24,7 @@ const lines = [
   'DTSTAMP:20260901T000000Z',
   'DTSTART;VALUE=DATE:20270821',
   'DTEND;VALUE=DATE:20270822',
-  'SUMMARY:Patricia & Cosmin’s wedding',
+  'SUMMARY:Pati & Cos’s wedding',
   'DESCRIPTION:Save the date. A formal invitation will follow.\\n' +
     `Details: ${DETAILS_URL}`,
   'LOCATION:Wonderland - Sala Riviera\\, Cluj-Napoca',

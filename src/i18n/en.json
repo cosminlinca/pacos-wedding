@@ -2,9 +2,9 @@
     "locale": "en",
     "htmlLang": "en-GB",
     "dir": "ltr",
-    "meta.title": "Patricia & Cosmin — 21 August 2027, Cluj-Napoca",
-    "meta.description": "Save the date: Patricia & Cosmin are getting married on 21 August 2027 in Cluj-Napoca. A formal invitation will follow.",
-    "meta.ogAlt": "Patricia & Cosmin · 21 August 2027 · Cluj-Napoca",
+    "meta.title": "Pati & Cos — 21 August 2027, Cluj-Napoca",
+    "meta.description": "Save the date: Pati & Cos are getting married on 21 August 2027 in Cluj-Napoca. A formal invitation will follow.",
+    "meta.ogAlt": "Pati & Cos · 21 August 2027 · Cluj-Napoca",
 
     "skipToContent": "Skip to content",
 
@@ -35,7 +35,7 @@
     "calendar.google": "Google Calendar",
     "calendar.ics": "Download .ics (Apple, Outlook)",
     "calendar.menuLabel": "Calendar options",
-    "calendar.eventTitle": "Patricia & Cosmin's wedding",
+    "calendar.eventTitle": "Pati & Cos's wedding",
     "calendar.eventDetails": "Save the date. A formal invitation will follow. Details at cosminlinca.github.io/pacos-wedding/",
 
     "scrollCue.label": "scroll",
@@ -53,5 +53,5 @@
     "footer.monogram": "P & C",
     "footer.date": "21.08.2027",
     "footer.place": "Cluj-Napoca",
-    "footer.note": "With love, Patricia & Cosmin."
+    "footer.note": "With love, Pati & Cos."
 }

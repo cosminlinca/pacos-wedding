@@ -44,8 +44,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
         letter-spacing="10" text-anchor="middle" font-weight="600">SAVE THE DATE</text>
   <line x1="${W / 2 - 40}" y1="180" x2="${W / 2 + 40}" y2="180" stroke="#9A7B4F" stroke-width="1.5"/>
 
-  <text x="${W / 2}" y="330" fill="#23231F" font-family="${serif}" font-size="118"
-        text-anchor="middle">Patricia <tspan fill="#2F3D33" font-style="italic">&amp;</tspan> Cosmin</text>
+  <text x="${W / 2}" y="330" fill="#23231F" font-family="${serif}" font-size="160"
+        text-anchor="middle">Pati <tspan fill="#2F3D33" font-style="italic">&amp;</tspan> Cos</text>
 
   <text x="${W / 2}" y="430" fill="#2F3D33" font-family="${serif}" font-size="46"
         letter-spacing="2" text-anchor="middle">21 August 2027</text>

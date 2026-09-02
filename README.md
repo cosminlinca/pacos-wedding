@@ -1,6 +1,6 @@
 # pacos-wedding
 
-Teaser (save-the-date) site for **Patricia & Cosmin** — 21 August 2027, Cluj-Napoca
+Teaser (save-the-date) site for **Pati & Cos** — 21 August 2027, Cluj-Napoca
 (Wonderland, Sala Riviera).
 
 - **Live:** https://cosminlinca.github.io/pacos-wedding/ (RO) · `/en/` (EN)

@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Teaser (save-the-date) website for Patricia & Cosmin's wedding — 21 August 2027, Cluj-Napoca.",
+  "description": "Teaser (save-the-date) website for Pati & Cos's wedding — 21 August 2027, Cluj-Napoca.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

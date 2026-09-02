@@ -2,9 +2,9 @@
     "locale": "ro",
     "htmlLang": "ro-RO",
     "dir": "ltr",
-    "meta.title": "Patricia & Cosmin — 21 august 2027, Cluj-Napoca",
-    "meta.description": "Rezervați data: Patricia & Cosmin se căsătoresc pe 21 august 2027 la Cluj-Napoca. Invitația oficială urmează.",
-    "meta.ogAlt": "Patricia & Cosmin · 21 august 2027 · Cluj-Napoca",
+    "meta.title": "Pati & Cos — 21 august 2027, Cluj-Napoca",
+    "meta.description": "Rezervați data: Pati & Cos se căsătoresc pe 21 august 2027 la Cluj-Napoca. Invitația oficială urmează.",
+    "meta.ogAlt": "Pati & Cos · 21 august 2027 · Cluj-Napoca",
 
     "skipToContent": "Sari la conținut",
 
@@ -14,9 +14,9 @@
     "nav.switchToEn": "English version",
 
     "hero.eyebrow": "Rezervați data",
-    "hero.names": "Patricia & Cosmin",
-    "hero.nameA": "Patricia",
-    "hero.nameB": "Cosmin",
+    "hero.names": "Pati & Cos",
+    "hero.nameA": "Pati",
+    "hero.nameB": "Cos",
     "hero.and": "&",
     "hero.date": "21 august 2027",
     "hero.dateSentence": "Sâmbătă, 21 august 2027, la Cluj-Napoca.",
@@ -35,7 +35,7 @@
     "calendar.google": "Google Calendar",
     "calendar.ics": "Descarcă .ics (Apple, Outlook)",
     "calendar.menuLabel": "Opțiuni calendar",
-    "calendar.eventTitle": "Nunta Patriciei & a lui Cosmin",
+    "calendar.eventTitle": "Nunta lui Pati & Cos",
     "calendar.eventDetails": "Rezervați data. Invitația oficială urmează.",
 
     "scrollCue.label": "derulează",
@@ -53,5 +53,5 @@
     "footer.monogram": "P & C",
     "footer.date": "21.08.2027",
     "footer.place": "Cluj-Napoca",
-    "footer.note": "Cu drag, Patricia & Cosmin."
+    "footer.note": "Cu drag, Pati & Cos."
 }

@@ -1,6 +1,6 @@
 # Wedding website — implementation plan
 
-**Couple:** Patricia & Cosmin · **Monogram:** P & C
+**Couple:** Pati & Cos · **Monogram:** P & C
 **Date:** 21 August 2027 · **Place:** Cluj-Napoca — Wonderland, Sala Riviera
 **Repo:** https://github.com/cosminlinca/pacos-wedding (public)
 **Live URL:** https://cosminlinca.github.io/pacos-wedding/
@@ -43,7 +43,7 @@ Single page, two languages, one screen of content plus a short second block:
 
 1. **Hero (full viewport)**
    - Eyebrow: `SAVE THE DATE` / `REZERVAȚI DATA`
-   - Names: `Patricia & Cosmin`
+   - Names: `Pati & Cos`
    - Date: `21 August 2027` / `21 august 2027`
    - Place: `Cluj-Napoca · Wonderland — Sala Riviera`
    - Live **countdown** (days / hours / minutes / seconds), localised labels
@@ -147,7 +147,7 @@ export default defineConfig({
 
 ### i18n approach
 
-- Copy lives in `src/i18n/ro.json` and `src/i18n/en.json` — flat keys, no logic. Cosmin/Patricia edit these directly on GitHub.
+- Copy lives in `src/i18n/ro.json` and `src/i18n/en.json` — flat keys, no logic. Cos/Pati edit these directly on GitHub.
 - `src/lib/i18n.ts`: `getStrings(locale)`, `getLocaleFromUrl(url)`, `switchLocalePath(url, target)`.
 - Two routes only: `src/pages/index.astro` (ro), `src/pages/en/index.astro` (en). Both render the same components with a `locale` + `t` prop.
 - `<html lang>` set per route. `hreflang` alternates (`ro`, `en`, `x-default` → ro) in `<head>`.
@@ -175,7 +175,7 @@ export default defineConfig({
 
 ### SEO / meta / sharing
 
-- `<title>`: `Patricia & Cosmin — 21 August 2027, Cluj-Napoca` (localised).
+- `<title>`: `Pati & Cos — 21 August 2027, Cluj-Napoca` (localised).
 - Meta description, `og:title/description/type/url/locale` (+ `og:locale:alternate`), Twitter card.
 - **OG image:** hand-made 1200×630 PNG (names + date + monogram on ivory) in `public/`. Static for the teaser; can move to generated later.
 - `favicon.svg` — P&C monogram, ivory/green.
@@ -264,7 +264,7 @@ Rough effort: ~1 focused day.
 
 **Romanian (`/`)**
 - Eyebrow: `REZERVAȚI DATA`
-- Names: `Patricia & Cosmin`
+- Names: `Pati & Cos`
 - Date: `21 august 2027`
 - Place: `Cluj-Napoca · Wonderland — Sala Riviera`
 - Countdown labels: `zile · ore · minute · secunde`
@@ -276,7 +276,7 @@ Rough effort: ~1 focused day.
 
 **English (`/en/`)**
 - Eyebrow: `SAVE THE DATE`
-- Names: `Patricia & Cosmin`
+- Names: `Pati & Cos`
 - Date: `21 August 2027`
 - Place: `Cluj-Napoca · Wonderland — Sala Riviera`
 - Countdown labels: `days · hours · minutes · seconds`
@@ -288,7 +288,7 @@ Rough effort: ~1 focused day.
 
 ---
 
-## 9. Needed from Cosmin & Patricia later (not blocking the teaser)
+## 9. Needed from Cos & Pati later (not blocking the teaser)
 
 - Confirm exact venue label (`Wonderland` vs `Wonderland Resort`; hall name spelling).
 - Engagement photos (I'll give aspect-ratio + resolution guidance; hero wants a wide 3:2 or 16:9).
