@@ -1,0 +1,184 @@
+---
+import type { Locale } from '../lib/i18n';
+import Figure from './Figure.astro';
+import couplePhoto from '../assets/couple-path.jpg';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+---
+
+<section class="portrait" aria-labelledby="portrait-heading">
+  <div class="container portrait__inner">
+    <div class="portrait__text">
+      <p class="eyebrow" data-reveal style="--reveal-index: 0">
+        {t('portrait.eyebrow')}
+      </p>
+      <h2
+        class="portrait__lead"
+        id="portrait-heading"
+        data-reveal
+        style="--reveal-index: 1"
+      >
+        {t('portrait.lead')}
+      </h2>
+      <hr class="rule" data-reveal style="--reveal-index: 2" />
+      <p class="portrait__body measure" data-reveal style="--reveal-index: 3">
+        {t('portrait.body')}
+      </p>
+      <p class="portrait__caption" data-reveal style="--reveal-index: 4">
+        {t('portrait.caption')}
+      </p>
+    </div>
+
+    <div class="portrait__plate" data-motion>
+      <div class="portrait__frame">
+        <div class="portrait__media">
+          <Figure
+            fill
+            src={couplePhoto}
+            alt={t('portrait.alt')}
+            widths={[360, 540, 720, 900]}
+            sizes="(min-width: 60rem) 23rem, 78vw"
+            quality={60}
+            loading="lazy"
+            class="portrait__figure"
+          />
+        </div>
+        <span class="portrait__stamp" aria-hidden="true">
+          {t('footer.date')}
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .portrait {
+    padding-block: clamp(4rem, 2rem + 12vw, 8.5rem);
+    overflow-x: clip;
+  }
+
+  .portrait__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(2.5rem, 1.5rem + 5vw, 4.5rem);
+    text-align: center;
+  }
+
+  .portrait__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  .portrait__lead {
+    margin: 0;
+    font-size: var(--step-2);
+    font-weight: 400;
+    font-optical-sizing: auto;
+    font-variation-settings:
+      'SOFT' 30,
+      'WONK' 1,
+      'opsz' 72;
+    color: var(--ink);
+    max-width: 20ch;
+  }
+
+  .portrait__body {
+    color: var(--ink-soft);
+  }
+
+  .portrait__caption {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--step--1);
+    letter-spacing: 0.02em;
+    color: var(--brass);
+  }
+
+  /* The offset brass outline that slides in behind the photo. */
+  .portrait__plate {
+    position: relative;
+    isolation: isolate;
+    width: min(78vw, 20rem);
+  }
+
+  .portrait__plate::before {
+    content: '';
+    position: absolute;
+    inset: 1.15rem -1.15rem -1.15rem 1.15rem;
+    border: var(--hairline);
+    z-index: -1;
+  }
+
+  .portrait__frame {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    background: var(--bg-sink);
+    box-shadow: inset 0 0 0 1px rgb(var(--bg-rgb) / 0.4);
+  }
+
+  /* Taller than the frame so the scroll drift never exposes an edge. */
+  .portrait__media {
+    position: absolute;
+    inset: -8% 0;
+  }
+
+  .portrait__frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        120% 90% at 50% 40%,
+        transparent 45%,
+        rgb(var(--accent-rgb) / 0.18) 100%
+      ),
+      linear-gradient(
+        to top,
+        rgb(35 35 31 / 0.55) 0%,
+        rgb(35 35 31 / 0.12) 22%,
+        transparent 42%
+      );
+  }
+
+  .portrait__stamp {
+    position: absolute;
+    left: 1rem;
+    bottom: 0.85rem;
+    z-index: 1;
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    color: var(--bg);
+  }
+
+  @media (min-width: 60rem) {
+    .portrait__inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(3rem, 6vw, 6rem);
+      text-align: left;
+    }
+
+    .portrait__text {
+      align-items: flex-start;
+      flex: 1 1 0;
+    }
+
+    .portrait__plate {
+      flex: 0 0 auto;
+      width: clamp(17rem, 26vw, 23rem);
+    }
+  }
+</style>

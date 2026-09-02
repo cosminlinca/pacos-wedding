@@ -55,26 +55,52 @@ node scripts/make-ics.mjs
 
 ---
 
-## Add the real photos later
+## The photo
 
-The hero background is a `<Figure>` with **no image** — it renders a CSS
-placeholder (warm gradient + grain + P & C monogram) at the right aspect ratio.
+The engagement photo lives at [`src/assets/couple-path.jpg`](./src/assets/couple-path.jpg)
+(900 × 1600, portrait) and is used twice, on purpose:
 
-To drop in the engagement photo with **no layout or motion change**:
+- **Hero background** — heavily blurred, desaturated and veiled by the ivory
+  scrim, so it reads as warm texture behind the names rather than as a picture.
+  Encoded at `quality={45}` and max 720 px wide; the blur hides everything the
+  low bitrate costs.
+- **Portrait section** ([`src/components/Portrait.astro`](./src/components/Portrait.astro))
+  — the same frame shown properly, in its native 9:16, with the offset brass
+  outline and the `21.08.2027` stamp.
 
-1. Put the file in `src/assets/` (e.g. `src/assets/hero.jpg`). A wide **3:2 or
-   16:9** shot, ≥ 2560 px on the long edge.
-2. In [`src/components/Hero.astro`](./src/components/Hero.astro):
+`astro:assets` emits WebP with a `srcset` for both.
 
-   ```astro
-   ---
-   import heroPhoto from '../assets/hero.jpg';
-   ---
+### Swap it for another photo
 
-   <Figure src={heroPhoto} alt="" ratio="16 / 9" class="hero__figure" />
-   ```
+Drop the new file in `src/assets/` and change the one `import` in each of
+[`Hero.astro`](./src/components/Hero.astro) and
+[`Portrait.astro`](./src/components/Portrait.astro). Nothing else moves.
+A portrait (2:3 / 9:16) shot keeps the section layout as designed; for a
+landscape shot, change `aspect-ratio` on `.portrait__frame` too.
 
-`astro:assets` then emits AVIF/WebP with `srcset` automatically.
+Copy for the section — heading, body, caption and the alt text — is in
+`portrait.*` in the two i18n files, same as everything else.
+
+### Motion on this page
+
+All of it is CSS, all of it behind `prefers-reduced-motion: no-preference`,
+and none of it hides content when JavaScript is off:
+
+| Effect                                         | Where                                 |
+| ---------------------------------------------- | ------------------------------------- |
+| Names rise out of a mask, staggered            | `.hero__rise`                         |
+| Hero recedes as you scroll past                | `.hero__content`, `scroll()` timeline |
+| Slow Ken Burns on the hero wash                | `.hero__media-inner`                  |
+| Photo frame wipes open top-to-bottom           | `.portrait__frame`                    |
+| Photo settles out of a slow zoom               | `.figure__img`                        |
+| Photo drifts with the scroll                   | `.portrait__media`, `view()` timeline |
+| Brass outline and date stamp fade in behind it | `.portrait__plate`                    |
+
+The scroll-timeline effects are wrapped in `@supports` and simply do not happen
+on browsers without them. Everything lives in
+[`src/styles/motion.css`](./src/styles/motion.css); the `.is-visible` class that
+triggers the reveals comes from the one IntersectionObserver in
+[`Base.astro`](./src/layouts/Base.astro).
 
 ---
 
@@ -118,9 +144,10 @@ public/            favicon.svg · og-image.png · wedding.ics · robots.txt
 scripts/           make-ics.mjs · make-og.mjs  (asset generators)
 src/
   layouts/Base.astro         <head>, meta, hreflang, fonts, skip-link, reveal observer
-  components/                 Header · Hero · Countdown · AddToCalendar ·
-                              SaveTheDate · Figure · Footer · ScrollCue ·
-                              LangToggle · HomePage
+  assets/couple-path.jpg     the engagement photo
+  components/                 Header · Hero · Portrait · Countdown ·
+                              AddToCalendar · SaveTheDate · Figure · Footer ·
+                              ScrollCue · LangToggle · HomePage
   i18n/{ro,en}.json           all copy (flat keys)
   lib/{i18n,datetime,paths}.ts
   styles/{tokens,global,motion}.css

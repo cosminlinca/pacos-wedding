@@ -5,6 +5,7 @@ import Figure from './Figure.astro';
 import Countdown from './Countdown.astro';
 import AddToCalendar from './AddToCalendar.astro';
 import ScrollCue from './ScrollCue.astro';
+import couplePhoto from '../assets/couple-path.jpg';
 
 interface Props {
   locale: Locale;
@@ -18,7 +19,21 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
 <section class="hero" aria-labelledby="couple">
   <div class="hero__media" aria-hidden="true">
     <div class="hero__media-inner">
-      <Figure fill monogram="P & C" />
+      {
+        /* Decorative: the same photo, blurred to a warm wash. The readable
+          version lives in the Portrait section, so alt is empty here. */
+      }
+      <Figure
+        fill
+        src={couplePhoto}
+        alt=""
+        position="50% 56%"
+        widths={[480, 720, 900]}
+        sizes="100vw"
+        quality={68}
+        loading="eager"
+        class="hero__figure"
+      />
     </div>
     <div class="hero__scrim"></div>
   </div>
@@ -28,11 +43,17 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
       {t('hero.eyebrow')}
     </p>
 
-    <h1 class="hero__names" id="couple" data-reveal style="--reveal-index: 1">
-      <span class="hero__name">{t('hero.nameA')}</span>
+    <h1 class="hero__names" id="couple" data-motion>
+      <span class="hero__name">
+        <span class="hero__rise" style="--i: 0">{t('hero.nameA')}</span>
+      </span>
       <span class="hero__pair">
-        <span class="hero__amp">{t('hero.and')}</span>
-        <span class="hero__name">{t('hero.nameB')}</span>
+        <span class="hero__amp">
+          <span class="hero__rise" style="--i: 1">{t('hero.and')}</span>
+        </span>
+        <span class="hero__name">
+          <span class="hero__rise" style="--i: 2">{t('hero.nameB')}</span>
+        </span>
       </span>
     </h1>
 
@@ -76,10 +97,17 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     z-index: -2;
   }
 
+  /* Generous bleed: the blur radius and the Ken Burns drift both eat into the
+     edges, and neither may ever expose the page background. */
   .hero__media-inner {
     position: absolute;
-    inset: -4% -4% -8% -4%;
+    inset: -10%;
     will-change: transform;
+  }
+
+  .hero__media-inner :global(.figure__img) {
+    filter: blur(9px) saturate(0.95);
+    transform: scale(1.06);
   }
 
   .hero__scrim {
@@ -87,9 +115,9 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     inset: 0;
     background: radial-gradient(
       90% 70% at 50% 42%,
-      rgb(var(--bg-rgb) / 0.35),
-      rgb(var(--bg-rgb) / 0.72) 70%,
-      rgb(var(--bg-rgb) / 0.9) 100%
+      rgb(var(--bg-rgb) / 0.42),
+      rgb(var(--bg-rgb) / 0.66) 70%,
+      rgb(var(--bg-rgb) / 0.86) 100%
     );
   }
 
@@ -131,6 +159,20 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     white-space: nowrap;
   }
 
+  /* Masks for the rise-in: the padding gives ascenders and descenders room,
+     the matching negative margin keeps the baselines exactly where they were. */
+  .hero__name,
+  .hero__amp {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.14em 0.2em;
+    margin-block: -0.14em -0.2em;
+  }
+
+  .hero__rise {
+    display: block;
+  }
+
   .hero__amp {
     font-style: italic;
     font-variation-settings:
@@ -155,15 +197,18 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     color: var(--accent-ink);
   }
 
+  /* Full-strength ink rather than --ink-soft: these sit over the thinnest part
+     of the scrim, where the softer grey washed out. No shadow — they should
+     read exactly like the rest of the hero type. */
   .hero__place {
     font-size: var(--step-0);
-    color: var(--ink-soft);
+    color: var(--ink);
     letter-spacing: 0.02em;
   }
 
   .hero__sentence {
     font-size: var(--step--1);
-    color: var(--ink-soft);
+    color: var(--ink);
   }
 
   .hero__cue {

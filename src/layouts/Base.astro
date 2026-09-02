@@ -117,7 +117,9 @@ const jsonLd = {
     <script>
       // Reveal-on-scroll. No-op (everything shown) when motion is reduced or
       // IntersectionObserver is missing.
-      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const els = document.querySelectorAll<HTMLElement>(
+        '[data-reveal], [data-motion]'
+      );
       const show = (el: Element) => el.classList.add('is-visible');
       const reduce = window.matchMedia(
         '(prefers-reduced-motion: reduce)'
@@ -139,8 +141,17 @@ const jsonLd = {
         els.forEach((el) => io.observe(el));
 
         // Safety net: never leave content hidden if the observer is starved
-        // (very slow device, background tab on load, odd viewport).
-        window.setTimeout(() => els.forEach(show), 1600);
+        // (very slow device, background tab on load, odd viewport). Only what
+        // is already on screen gets rescued — anything further down keeps its
+        // reveal for when the reader actually scrolls to it.
+        window.setTimeout(() => {
+          els.forEach((el) => {
+            if (el.classList.contains('is-visible')) return;
+            if (el.getBoundingClientRect().top >= window.innerHeight) return;
+            show(el);
+            io.unobserve(el);
+          });
+        }, 1600);
       }
     </script>
   </body>
