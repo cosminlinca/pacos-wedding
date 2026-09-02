@@ -4,6 +4,7 @@ import { getStrings } from '../lib/i18n';
 import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
 import Hero from './Hero.astro';
+import Portrait from './Portrait.astro';
 import SaveTheDate from './SaveTheDate.astro';
 import Footer from './Footer.astro';
 
@@ -21,6 +22,7 @@ const NOINDEX = false;
 <Base locale={locale} t={t} noindex={NOINDEX}>
   <Header slot="header" locale={locale} t={t} />
   <Hero locale={locale} t={t} />
+  <Portrait locale={locale} t={t} />
   <SaveTheDate locale={locale} t={t} />
   <Footer slot="footer" locale={locale} t={t} />
 </Base>

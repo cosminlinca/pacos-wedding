@@ -74,6 +74,119 @@
   }
 }
 
+/* ---- Hero names: mask rise ---------------------------------------------
+   Each word sits in an `overflow: hidden` box and slides up from under it.
+   Nothing is hidden without JS, and reduced motion skips the whole thing. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .hero__rise {
+    transform: translateY(115%);
+    opacity: 0;
+    transition:
+      transform 980ms var(--ease-editorial),
+      opacity 620ms var(--ease-editorial);
+    transition-delay: calc(180ms + var(--i, 0) * 110ms);
+    will-change: transform;
+  }
+
+  html.js .hero__names.is-visible .hero__rise {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Hero recedes as the page scrolls past it. Scroll-timeline only, so it is a
+   no-op on browsers without it. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__content {
+      animation: hero-recede linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 15vh 85vh;
+    }
+  }
+}
+
+@keyframes hero-recede {
+  to {
+    opacity: 0.1;
+    transform: translateY(-3.5%) scale(0.985);
+  }
+}
+
+/* ---- Portrait section ---------------------------------------------------
+   Three separate layers so no two animations fight over `transform`:
+   the frame wipes open, the media layer drifts with the scroll, the image
+   itself settles out of a slow zoom. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .portrait__frame {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 1150ms var(--ease-editorial);
+  }
+
+  html.js .portrait__plate.is-visible .portrait__frame {
+    clip-path: inset(0 0 0 0);
+  }
+
+  html.js .portrait__frame .figure__img {
+    transform: scale(1.14);
+    transition: transform 1600ms var(--ease-editorial);
+    transition-delay: 120ms;
+  }
+
+  html.js .portrait__plate.is-visible .figure__img {
+    transform: none;
+  }
+
+  html.js .portrait__plate::before {
+    opacity: 0;
+    transform: translate(-14px, -14px);
+    transition:
+      opacity 900ms var(--ease-editorial),
+      transform 900ms var(--ease-editorial);
+    transition-delay: 620ms;
+  }
+
+  html.js .portrait__plate.is-visible::before {
+    opacity: 1;
+    transform: none;
+  }
+
+  html.js .portrait__stamp {
+    opacity: 0;
+    transform: translateY(0.6em);
+    transition:
+      opacity 700ms var(--ease-editorial),
+      transform 700ms var(--ease-editorial);
+    transition-delay: 900ms;
+  }
+
+  html.js .portrait__plate.is-visible .portrait__stamp {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Parallax drift of the photo inside its frame, tied to the element's own
+   passage through the viewport. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .portrait__media {
+      animation: portrait-drift linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  }
+}
+
+@keyframes portrait-drift {
+  from {
+    transform: translate3d(0, -5%, 0);
+  }
+  to {
+    transform: translate3d(0, 5%, 0);
+  }
+}
+
 /* Countdown digit cross-fade (class toggled from the countdown script). */
 .countdown__value {
   transition: opacity 220ms var(--ease-editorial);
