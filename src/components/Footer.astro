@@ -13,7 +13,18 @@ const { locale, t } = Astro.props;
 <footer class="site-footer">
   <div class="container site-footer__inner">
     <p class="site-footer__line">
-      <span class="site-footer__monogram">{t('footer.monogram')}</span>
+      <span class="site-footer__monogram">
+        {
+          t('footer.monogram')
+            .split('&')
+            .map((part, index) => (
+              <>
+                {index > 0 && <span class="couple-amp">&amp;</span>}
+                {part}
+              </>
+            ))
+        }
+      </span>
       <span class="site-footer__dot" aria-hidden="true">·</span>
       <span>{t('footer.date')}</span>
       <span class="site-footer__dot" aria-hidden="true">·</span>
@@ -56,7 +67,7 @@ const { locale, t } = Astro.props;
   }
 
   .site-footer__dot {
-    color: var(--brass);
+    color: var(--accent);
   }
 
   .site-footer__note {

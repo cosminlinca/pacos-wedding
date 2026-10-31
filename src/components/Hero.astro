@@ -49,7 +49,7 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
         <span class="hero__rise" style="--i: 0">{t('hero.nameA')}</span>
       </span>
       <span class="hero__pair">
-        <span class="hero__amp">
+        <span class="hero__amp couple-amp">
           <span class="hero__rise" style="--i: 1">{t('hero.and')}</span>
         </span>
         <span class="hero__name">
@@ -174,15 +174,6 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
 
   .hero__rise {
     display: block;
-  }
-
-  .hero__amp {
-    font-style: italic;
-    font-variation-settings:
-      'SOFT' 60,
-      'WONK' 1,
-      'opsz' 144;
-    color: var(--accent);
   }
 
   .hero__meta {

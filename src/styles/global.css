@@ -45,7 +45,7 @@ a {
   color: inherit;
   text-underline-offset: 0.15em;
   text-decoration-thickness: 1px;
-  text-decoration-color: var(--brass);
+  text-decoration-color: var(--accent);
 }
 
 a:hover {
@@ -142,7 +142,7 @@ h3 {
 .button:disabled {
   background: var(--bg-sink);
   color: var(--ink-soft);
-  border-color: var(--brass-soft);
+  border-color: var(--accent-soft);
   cursor: not-allowed;
 }
 
@@ -189,7 +189,20 @@ h3 {
   color: var(--accent-ink);
 }
 
-/* ---- brass rule ---- */
+.couple-amp {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings:
+    'SOFT' 60,
+    'WONK' 1,
+    'opsz' 144;
+  font-size: 0.75em;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* ---- accent rule ---- */
 .rule {
   width: 3.5rem;
   height: 0;

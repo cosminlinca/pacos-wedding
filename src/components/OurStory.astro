@@ -30,6 +30,7 @@ const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
               </p>
               <div class="invitation-stack" data-reveal>
                 <Figure
+                  framed
                   src={photo}
                   alt={t(`story.${id}.alt`)}
                   widths={[480, 720, 960].filter(
@@ -46,6 +47,7 @@ const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
       ) : (
         <div class="story__preview" data-reveal>
           <Figure
+            framed
             src={couplePhoto}
             alt={t('portrait.alt')}
             ratio="9 / 16"
@@ -91,7 +93,7 @@ const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
     width: 0.6rem;
     height: 0.6rem;
     border-radius: 50%;
-    background: var(--brass);
+    background: var(--accent);
   }
 
   .story__entry :global(.figure) {

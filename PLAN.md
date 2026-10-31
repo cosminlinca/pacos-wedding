@@ -26,7 +26,7 @@
 
 | Choice | Default | Alternatives |
 |---|---|---|
-| Accent colour | **Forest green** (deep, muted) + brass hairlines on cream/ivory, ink text | oxblood, cocoa brown — one CSS variable to swap |
+| Accent colour | **Forest green** (deep, muted) for all accents and rules on cream/ivory, charcoal text | — |
 | Display typeface | **Fraunces** (variable optical serif) | Cormorant Garamond |
 | Body typeface | **Inter** | — |
 | Fonts delivery | Self-hosted via Fontsource (no Google Fonts CDN call) | — |
@@ -67,7 +67,7 @@ Our Story · The Day (schedule + dress code) · Venue & map · Travel & Stay (ho
 
 ## 3. Design system
 
-**Lane A — warm editorial:** grounded, timeless, a little magazine. Generous whitespace, big type, thin brass rules, asymmetric blocks.
+**Lane A — warm editorial:** grounded, timeless, a little magazine. Generous whitespace, big type, thin green rules, asymmetric blocks. Use only forest-green accents and charcoal text on ivory, with two font families: Fraunces and Inter.
 
 ### Tokens (`src/styles/tokens.css`)
 
@@ -75,11 +75,12 @@ Our Story · The Day (schedule + dress code) · Venue & map · Travel & Stay (ho
 --bg:        #F6F1E7   /* warm ivory */
 --bg-sink:   #EFE7D7   /* slightly deeper panel */
 --ink:       #23231F   /* near-black text */
---ink-soft:  #5A564C   /* secondary text */
+--ink-soft:  color-mix(in srgb, var(--ink) 75%, var(--bg));
 --accent:    #2F3D33   /* forest green (swap here for oxblood/cocoa) */
 --accent-ink:#1E2721
---brass:     #9A7B4F   /* hairlines, small caps, dividers */
---focus:     #2F6FED   /* focus ring, not part of the palette */
+--accent-rgb: 47 61 51;
+--accent-soft: rgb(var(--accent-rgb) / 0.28);
+--focus:     var(--accent);
 
 --font-display: "Fraunces Variable", Georgia, serif;
 --font-body:    "Inter", system-ui, sans-serif;
@@ -93,10 +94,12 @@ Our Story · The Day (schedule + dress code) · Venue & map · Travel & Stay (ho
 
 --measure: 62ch;
 --radius: 2px;
---rule: 1px solid var(--brass);
+--rule: 1px solid var(--accent);
+--hairline: 1px solid var(--accent-soft);
 ```
 
 - **Type:** Fraunces for eyebrow (small caps, letter-spaced), names (`--step-4`, optical `SOFT`/`WONK` axes tuned), date. Inter for body, countdown digits, UI.
+- **Ampersands:** the header, title, and footer share the same green italic Fraunces treatment via `.couple-amp`.
 - **Contrast:** body text is `--ink` on `--bg` (AA+). Accent green is used for fills, rules, and large display text only — checked ≥ 3:1 where it carries meaning.
 - **Grid:** single column, `min(92vw, 68rem)` container, 8px spacing scale.
 - **Iconography:** one hairline chevron (scroll cue), one calendar glyph. No icon library.

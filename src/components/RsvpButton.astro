@@ -5,15 +5,16 @@ interface Props {
   t: (key: string) => string;
   /** Header and hero links lead to the RSVP section until the form is ready. */
   section?: boolean;
+  outline?: boolean;
 }
 
-const { t, section = false } = Astro.props;
+const { t, section = false, outline = false } = Astro.props;
 ---
 
 {
   section && !RSVP_FORM_URL ? (
     <button
-      class="button"
+      class:list={['button', { 'button--outline': outline }]}
       type="button"
       disabled
       aria-describedby="rsvp-pending"
@@ -21,7 +22,10 @@ const { t, section = false } = Astro.props;
       {t('rsvp.button')}
     </button>
   ) : (
-    <a class="button" href={RSVP_FORM_URL ?? '#rsvp'}>
+    <a
+      class:list={['button', { 'button--outline': outline }]}
+      href={RSVP_FORM_URL ?? '#rsvp'}
+    >
       {t('rsvp.button')}
     </a>
   )

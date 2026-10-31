@@ -9,7 +9,7 @@ interface Props {
 const { t } = Astro.props;
 const photoWidth = VENUE_PHOTO?.width;
 const photoWidths = photoWidth
-  ? [640, 960, 1280].filter((width) => width <= photoWidth)
+  ? [640, 960, 1280, 1920].filter((width) => width <= photoWidth)
   : [];
 ---
 
@@ -32,8 +32,10 @@ const photoWidths = photoWidth
       VENUE_PHOTO && (
         <div data-reveal>
           <Figure
+            framed
             src={VENUE_PHOTO}
             alt={t('venue.photoAlt')}
+            ratio="7 / 5"
             widths={photoWidths}
             sizes="(min-width: 60rem) 32rem, 92vw"
             loading="lazy"

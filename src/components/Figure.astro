@@ -10,6 +10,8 @@ interface Props {
   ratio?: string;
   /** Fill a positioned ancestor instead of reserving an aspect ratio. */
   fill?: boolean;
+  /** Opposite-corner curves with the shared green gradient. */
+  framed?: boolean;
   /** Placeholder monogram text. */
   monogram?: string;
   sizes?: string;
@@ -28,6 +30,7 @@ const {
   alt = '',
   ratio = '3 / 2',
   fill = false,
+  framed = false,
   monogram = 'P & C',
   sizes = '100vw',
   widths = [640, 960, 1280, 1920, 2560],
@@ -50,7 +53,11 @@ const style =
   class:list={[
     'figure',
     className,
-    { 'figure--placeholder': !src, 'figure--fill': fill },
+    {
+      'figure--placeholder': !src,
+      'figure--fill': fill,
+      'figure--framed': framed,
+    },
   ]}
   style={style}
 >
@@ -109,6 +116,30 @@ const style =
     height: 100%;
   }
 
+  .figure--framed {
+    overflow: visible;
+    background: transparent;
+    filter: drop-shadow(0 0.75rem 1rem rgb(var(--accent-rgb) / 0.16));
+  }
+
+  .figure--framed .figure__img,
+  .figure--framed .figure__placeholder,
+  .figure--framed::after {
+    mask: url('../assets/photo-frame.svg') center / 100% 100% no-repeat;
+  }
+
+  .figure--framed::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 45%,
+      rgb(var(--accent-rgb) / 0.32) 100%
+    );
+    pointer-events: none;
+  }
+
   .figure__img,
   .figure__placeholder {
     position: absolute;
@@ -137,7 +168,7 @@ const style =
         rgb(var(--accent-rgb) / 0.22),
         transparent 60%
       ),
-      linear-gradient(160deg, var(--bg) 0%, var(--bg-sink) 55%, #e6dbc6 100%);
+      linear-gradient(160deg, var(--bg) 0%, var(--bg-sink) 100%);
   }
 
   .figure__grain {

@@ -11,7 +11,7 @@ const { t } = Astro.props;
   id="schedule"
   aria-labelledby="schedule-heading"
 >
-  <div class="container invitation-stack">
+  <div class="container invitation-stack schedule__inner">
     <p class="eyebrow" data-reveal>{t('schedule.eyebrow')}</p>
     <h2 class="section-heading" id="schedule-heading" data-reveal>
       {t('schedule.heading')}
@@ -19,10 +19,44 @@ const { t } = Astro.props;
     <ol class="schedule__events" role="list">
       {
         ['ceremony', 'party'].map((event) => (
-          <li class="invitation-stack schedule__event" data-reveal>
-            <p class="eyebrow">{t(`schedule.${event}.time`)}</p>
-            <h3>{t(`schedule.${event}.heading`)}</h3>
-            <p class="detail-note">{t(`schedule.${event}.place`)}</p>
+          <li class="schedule__event">
+            <div class="schedule__marker" aria-hidden="true">
+              <svg
+                viewBox="0 0 64 64"
+                width="40"
+                height="40"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                focusable="false"
+              >
+                {event === 'ceremony' ? (
+                  <>
+                    <path d="M32 4v12M27 9h10M16 32l16-16 16 16" />
+                    <path d="M20 28v28h24V28M20 38h-8v18h40V38h-8" />
+                    <path d="M28 56V45a4 4 0 0 1 8 0v11" />
+                    <circle cx="32" cy="32" r="3" />
+                  </>
+                ) : (
+                  <>
+                    <g transform="rotate(18 22 32)">
+                      <path d="M16 10h12v17a6 6 0 0 1-12 0ZM16 21h12M22 33v19M16 52h12" />
+                    </g>
+                    <g transform="rotate(-18 42 32)">
+                      <path d="M36 10h12v17a6 6 0 0 1-12 0ZM36 21h12M42 33v19M36 52h12" />
+                    </g>
+                    <path d="M32 3v3M27 4l1 2M37 4l-1 2" />
+                  </>
+                )}
+              </svg>
+            </div>
+            <div class="schedule__details" data-reveal>
+              <p class="schedule__time">{t(`schedule.${event}.time`)}</p>
+              <h3>{t(`schedule.${event}.heading`)}</h3>
+              <p class="detail-note">{t(`schedule.${event}.place`)}</p>
+            </div>
           </li>
         ))
       }
@@ -32,21 +66,75 @@ const { t } = Astro.props;
 
 <style>
   .schedule {
+    --timeline-marker-size: 4rem;
+    --timeline-gap: var(--space-2xl);
     background: var(--bg-sink);
+  }
+
+  .schedule__inner {
+    align-items: center;
+    text-align: center;
   }
 
   .schedule__events {
     display: grid;
-    width: 100%;
-    gap: var(--space-xl);
+    width: min(100%, 52rem);
+    gap: var(--timeline-gap);
     list-style: none;
     padding: 0;
-    margin-top: var(--space-lg);
+    margin-top: var(--space-xl);
   }
 
   .schedule__event {
-    border-top: var(--rule);
-    padding-top: var(--space-lg);
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--timeline-marker-size) minmax(0, 1fr);
+    gap: var(--space-lg);
+    align-items: start;
+  }
+
+  .schedule__event:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--timeline-marker-size) / 2);
+    bottom: calc(-1 * var(--timeline-gap) - var(--timeline-marker-size) / 2);
+    left: calc(var(--timeline-marker-size) / 2);
+    width: 1px;
+    background: var(--accent-soft);
+  }
+
+  .schedule__marker {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    grid-column: 1;
+    grid-row: 1;
+    width: var(--timeline-marker-size);
+    height: var(--timeline-marker-size);
+    border: var(--hairline);
+    border-radius: 50%;
+    background: var(--bg-sink);
+    color: var(--accent);
+  }
+
+  .schedule__details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    grid-column: 2;
+    grid-row: 1;
+    padding-block: var(--space-xs);
+    text-align: left;
+  }
+
+  .schedule__time {
+    font-size: var(--step--1);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
   }
 
   .schedule__event h3 {
@@ -54,9 +142,35 @@ const { t } = Astro.props;
   }
 
   @media (min-width: 45rem) {
-    .schedule__events {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-2xl);
+    .schedule {
+      --timeline-marker-size: 4.5rem;
+    }
+
+    .schedule__event {
+      grid-template-columns:
+        minmax(0, 1fr) var(--timeline-marker-size)
+        minmax(0, 1fr);
+      column-gap: var(--space-xl);
+    }
+
+    .schedule__event:not(:last-child)::before {
+      left: 50%;
+    }
+
+    .schedule__marker {
+      grid-column: 2;
+    }
+
+    .schedule__details {
+      grid-column: 1;
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .schedule__event:nth-child(even) .schedule__details {
+      grid-column: 3;
+      align-items: flex-start;
+      text-align: left;
     }
   }
 </style>

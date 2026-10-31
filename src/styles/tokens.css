@@ -9,12 +9,15 @@
   --bg: #f6f1e7; /* warm ivory */
   --bg-sink: #efe7d7; /* slightly deeper panel */
   --ink: #23231f; /* near-black text */
-  --ink-soft: #5a564c; /* secondary text */
+  --ink-soft: color-mix(
+    in srgb,
+    var(--ink) 75%,
+    var(--bg)
+  ); /* secondary text */
   --accent: #2f3d33; /* forest green — swap here for oxblood / cocoa */
   --accent-ink: #1e2721; /* darker green for text on ivory */
-  --brass: #9a7b4f; /* hairlines, small caps, dividers */
-  --brass-soft: #c8b48f; /* faint rules, monogram watermark */
-  --focus: #2f6fed; /* focus ring — not part of the palette */
+  --accent-soft: rgb(var(--accent-rgb) / 0.28); /* faint rules and borders */
+  --focus: var(--accent);
 
   --bg-rgb: 246 241 231;
   --accent-rgb: 47 61 51;
@@ -48,8 +51,8 @@
   --measure: 62ch;
   --container: min(92vw, 68rem);
   --radius: 2px;
-  --rule: 1px solid var(--brass);
-  --hairline: 1px solid var(--brass-soft);
+  --rule: 1px solid var(--accent);
+  --hairline: 1px solid var(--accent-soft);
 
   /* ---- motion ---- */
   --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
