@@ -1,0 +1,129 @@
+---
+import { STORY_ENTRIES } from '../lib/invitation';
+import Figure from './Figure.astro';
+import couplePhoto from '../assets/couple-path.jpg';
+
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
+  photo ? [{ id, photo }] : []
+);
+---
+
+<section class="invitation-section" id="story" aria-labelledby="story-heading">
+  <div class="container invitation-stack">
+    <p class="eyebrow" data-reveal>{t('story.eyebrow')}</p>
+    <h2 class="section-heading" id="story-heading" data-reveal>
+      {t('story.heading')}
+    </h2>
+    <p class="measure detail-note" data-reveal>{t('portrait.body')}</p>
+    {
+      entries.length > 0 ? (
+        <ol class="story__timeline" role="list">
+          {entries.map(({ id, photo }) => (
+            <li class="story__entry">
+              <p class="story__year eyebrow" data-reveal>
+                {t(`story.${id}.year`)}
+              </p>
+              <div class="invitation-stack" data-reveal>
+                <Figure
+                  src={photo}
+                  alt={t(`story.${id}.alt`)}
+                  widths={[480, 720, 960].filter(
+                    (width) => width <= photo.width
+                  )}
+                  sizes="(min-width: 60rem) 42rem, 85vw"
+                  loading="lazy"
+                />
+                <p>{t(`story.${id}.caption`)}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="story__preview" data-reveal>
+          <Figure
+            src={couplePhoto}
+            alt={t('portrait.alt')}
+            ratio="9 / 16"
+            widths={[360, 540, 720, 900]}
+            sizes="(min-width: 45rem) 23rem, 85vw"
+            quality={60}
+            loading="lazy"
+          />
+          <div class="invitation-stack">
+            <p class="story__lead">{t('portrait.lead')}</p>
+            <p class="detail-note">{t('story.pending')}</p>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .story__timeline {
+    width: 100%;
+    list-style: none;
+    padding: 0 0 0 var(--space-lg);
+    margin-top: var(--space-xl);
+    border-left: var(--hairline);
+  }
+
+  .story__entry {
+    position: relative;
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .story__entry + .story__entry {
+    margin-top: var(--space-2xl);
+  }
+
+  .story__entry::before {
+    content: '';
+    position: absolute;
+    top: var(--space-xs);
+    left: calc(-1 * var(--space-lg) - 0.3rem);
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--brass);
+  }
+
+  .story__entry :global(.figure) {
+    width: 100%;
+  }
+
+  .story__preview {
+    display: grid;
+    align-items: center;
+    gap: var(--space-xl);
+    width: 100%;
+    margin-top: var(--space-lg);
+  }
+
+  .story__preview :global(.figure) {
+    width: min(100%, 23rem);
+  }
+
+  .story__lead {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    line-height: 1.2;
+  }
+
+  @media (min-width: 45rem) {
+    .story__preview {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+    }
+
+    .story__entry {
+      grid-template-columns: 10rem 1fr;
+    }
+  }
+</style>

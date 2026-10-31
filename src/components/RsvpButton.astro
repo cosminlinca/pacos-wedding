@@ -1,0 +1,28 @@
+---
+import { RSVP_FORM_URL } from '../lib/invitation';
+
+interface Props {
+  t: (key: string) => string;
+  /** Header and hero links lead to the RSVP section until the form is ready. */
+  section?: boolean;
+}
+
+const { t, section = false } = Astro.props;
+---
+
+{
+  section && !RSVP_FORM_URL ? (
+    <button
+      class="button"
+      type="button"
+      disabled
+      aria-describedby="rsvp-pending"
+    >
+      {t('rsvp.button')}
+    </button>
+  ) : (
+    <a class="button" href={RSVP_FORM_URL ?? '#rsvp'}>
+      {t('rsvp.button')}
+    </a>
+  )
+}

@@ -1,0 +1,62 @@
+---
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+---
+
+<section
+  class="invitation-section schedule"
+  id="schedule"
+  aria-labelledby="schedule-heading"
+>
+  <div class="container invitation-stack">
+    <p class="eyebrow" data-reveal>{t('schedule.eyebrow')}</p>
+    <h2 class="section-heading" id="schedule-heading" data-reveal>
+      {t('schedule.heading')}
+    </h2>
+    <ol class="schedule__events" role="list">
+      {
+        ['ceremony', 'party'].map((event) => (
+          <li class="invitation-stack schedule__event" data-reveal>
+            <p class="eyebrow">{t(`schedule.${event}.time`)}</p>
+            <h3>{t(`schedule.${event}.heading`)}</h3>
+            <p class="detail-note">{t(`schedule.${event}.place`)}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .schedule {
+    background: var(--bg-sink);
+  }
+
+  .schedule__events {
+    display: grid;
+    width: 100%;
+    gap: var(--space-xl);
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-lg);
+  }
+
+  .schedule__event {
+    border-top: var(--rule);
+    padding-top: var(--space-lg);
+  }
+
+  .schedule__event h3 {
+    font-size: var(--step-1);
+  }
+
+  @media (min-width: 45rem) {
+    .schedule__events {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

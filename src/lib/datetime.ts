@@ -5,8 +5,8 @@ import type { Locale } from './i18n';
  *
  * Europe/Bucharest observes EEST (UTC+3) in August, so `+03:00` is correct for
  * 21 August 2027. The ceremony time is not known yet — this is treated as the
- * start of the day; regenerate `public/wedding.ics` and this constant when the
- * schedule is confirmed.
+ * start of the day. The calendar stays all-day even when schedule times are
+ * confirmed; regenerate `public/wedding.ics` if the wedding date changes.
  */
 export const WEDDING = new Date('2027-08-21T00:00:00+03:00');
 

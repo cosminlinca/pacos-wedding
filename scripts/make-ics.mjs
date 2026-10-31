@@ -2,7 +2,7 @@
  * Regenerate `public/wedding.ics`.
  *
  * Run with: `node scripts/make-ics.mjs`
- * Rerun whenever the ceremony time / schedule is confirmed (currently all-day).
+ * Rerun when the date or invitation details change. The event stays all-day.
  */
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -16,7 +16,7 @@ const DETAILS_URL = 'https://cosminlinca.github.io/pacos-wedding/';
 const lines = [
   'BEGIN:VCALENDAR',
   'VERSION:2.0',
-  'PRODID:-//pacos-wedding//save-the-date teaser//EN',
+  'PRODID:-//pacos-wedding//wedding invitation//EN',
   'CALSCALE:GREGORIAN',
   'METHOD:PUBLISH',
   'BEGIN:VEVENT',
@@ -25,7 +25,7 @@ const lines = [
   'DTSTART;VALUE=DATE:20270821',
   'DTEND;VALUE=DATE:20270822',
   'SUMMARY:Pati & Cos’s wedding',
-  'DESCRIPTION:Save the date. A formal invitation will follow.\\n' +
+  'DESCRIPTION:Join us for our wedding. See our invitation for details.\\n' +
     `Details: ${DETAILS_URL}`,
   'LOCATION:Wonderland - Sala Riviera\\, Cluj-Napoca',
   'STATUS:CONFIRMED',

@@ -1,6 +1,6 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//pacos-wedding//save-the-date teaser//EN
+PRODID:-//pacos-wedding//wedding invitation//EN
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
@@ -9,8 +9,8 @@ DTSTAMP:20260901T000000Z
 DTSTART;VALUE=DATE:20270821
 DTEND;VALUE=DATE:20270822
 SUMMARY:Pati & Cos’s wedding
-DESCRIPTION:Save the date. A formal invitation will follow.\nDetails: https
- ://cosminlinca.github.io/pacos-wedding/
+DESCRIPTION:Join us for our wedding. See our invitation for details.\nDetai
+ ls: https://cosminlinca.github.io/pacos-wedding/
 LOCATION:Wonderland - Sala Riviera\, Cluj-Napoca
 STATUS:CONFIRMED
 TRANSP:TRANSPARENT

@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://cosminlinca.github.io/pacos-wedding/sitemap-index.xml
+Disallow: /

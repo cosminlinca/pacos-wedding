@@ -4,8 +4,10 @@ import { getStrings } from '../lib/i18n';
 import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
 import Hero from './Hero.astro';
-import Portrait from './Portrait.astro';
-import SaveTheDate from './SaveTheDate.astro';
+import OurStory from './OurStory.astro';
+import Schedule from './Schedule.astro';
+import Venue from './Venue.astro';
+import Rsvp from './Rsvp.astro';
 import Footer from './Footer.astro';
 
 interface Props {
@@ -15,14 +17,15 @@ interface Props {
 const { locale } = Astro.props;
 const t = getStrings(locale);
 
-// Flip to `true` to keep the teaser out of search indexes.
-const NOINDEX = false;
+const NOINDEX = true;
 ---
 
 <Base locale={locale} t={t} noindex={NOINDEX}>
   <Header slot="header" locale={locale} t={t} />
   <Hero locale={locale} t={t} />
-  <Portrait locale={locale} t={t} />
-  <SaveTheDate locale={locale} t={t} />
+  <OurStory t={t} />
+  <Schedule t={t} />
+  <Venue t={t} />
+  <Rsvp t={t} />
   <Footer slot="footer" locale={locale} t={t} />
 </Base>

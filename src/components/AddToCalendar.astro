@@ -8,9 +8,13 @@ interface Props {
   t: (key: string) => string;
 }
 
-const { t } = Astro.props;
+const { locale, t } = Astro.props;
 
 const location = 'Wonderland — Sala Riviera, Cluj-Napoca';
+const invitationUrl = new URL(
+  withBase(locale === 'en' ? '/en/' : '/'),
+  Astro.site ?? Astro.url
+).href;
 const googleUrl =
   'https://calendar.google.com/calendar/render?' +
   new URLSearchParams({
@@ -18,7 +22,7 @@ const googleUrl =
     text: t('calendar.eventTitle'),
     dates: `${ICS_START}/${ICS_END}`,
     location,
-    details: t('calendar.eventDetails'),
+    details: `${t('calendar.eventDetails')} ${invitationUrl}`,
   }).toString();
 
 const icsUrl = withBase('/wedding.ics');

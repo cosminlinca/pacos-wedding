@@ -2,6 +2,7 @@
 import type { Locale } from '../lib/i18n';
 import { withBase } from '../lib/paths';
 import LangToggle from './LangToggle.astro';
+import RsvpButton from './RsvpButton.astro';
 
 interface Props {
   locale: Locale;
@@ -17,16 +18,31 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
     <a class="monogram" href={homeHref} aria-label="Pati & Cos">
       <span aria-hidden="true">P&nbsp;&amp;&nbsp;C</span>
     </a>
-    <LangToggle locale={locale} t={t} />
+    <nav class="site-header__nav" aria-label={t('nav.sections')}>
+      {
+        ['story', 'schedule', 'venue'].map((section) => (
+          <a href={`#${section}`}>{t(`nav.${section}`)}</a>
+        ))
+      }
+    </nav>
+    <div class="site-header__actions">
+      <LangToggle locale={locale} t={t} />
+      <div class="site-header__rsvp">
+        <RsvpButton t={t} />
+        <p class="site-header__deadline">{t('rsvp.deadline')}</p>
+      </div>
+    </div>
   </div>
 </header>
 
 <style>
   .site-header {
-    position: absolute;
-    inset: 0 0 auto 0;
+    position: sticky;
+    top: 0;
     z-index: 10;
-    padding-block: var(--space-lg);
+    padding-block: var(--space-sm);
+    background: var(--bg);
+    border-bottom: var(--hairline);
   }
 
   .site-header__inner {
@@ -37,6 +53,7 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
   }
 
   .monogram {
+    display: none;
     font-family: var(--font-display);
     font-optical-sizing: auto;
     font-weight: 500;
@@ -49,5 +66,46 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
   .monogram:hover,
   .monogram:focus-visible {
     color: var(--ink);
+  }
+
+  .site-header__nav,
+  .site-header__deadline {
+    display: none;
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    width: 100%;
+  }
+
+  .site-header__rsvp {
+    text-align: center;
+  }
+
+  @media (min-width: 70rem) {
+    .monogram {
+      display: block;
+    }
+
+    .site-header__nav {
+      display: flex;
+      gap: var(--space-lg);
+      font-size: var(--step--1);
+    }
+
+    .site-header__actions {
+      width: auto;
+    }
+
+    .site-header__deadline {
+      display: block;
+      margin-top: var(--space-2xs);
+      font-size: var(--step--1);
+      color: var(--ink-soft);
+      max-width: 24ch;
+    }
   }
 </style>

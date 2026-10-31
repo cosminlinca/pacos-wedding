@@ -1,0 +1,65 @@
+---
+import { VENUE_MAPS_URL, VENUE_PHOTO } from '../lib/invitation';
+import Figure from './Figure.astro';
+
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+const photoWidth = VENUE_PHOTO?.width;
+const photoWidths = photoWidth
+  ? [640, 960, 1280].filter((width) => width <= photoWidth)
+  : [];
+---
+
+<section class="invitation-section" id="venue" aria-labelledby="venue-heading">
+  <div
+    class="container venue"
+    class:list={{ 'venue--with-photo': VENUE_PHOTO }}
+  >
+    <div class="invitation-stack" data-reveal>
+      <p class="eyebrow">{t('venue.eyebrow')}</p>
+      <h2 class="section-heading" id="venue-heading">{t('venue.heading')}</h2>
+      <p class="venue__name">{t('venue.name')}</p>
+      <p>{t('venue.address')}</p>
+      <p class="detail-note">{t('venue.parking')}</p>
+      <a class="button button--outline" href={VENUE_MAPS_URL}>
+        {t('venue.maps')}
+      </a>
+    </div>
+    {
+      VENUE_PHOTO && (
+        <div data-reveal>
+          <Figure
+            src={VENUE_PHOTO}
+            alt={t('venue.photoAlt')}
+            widths={photoWidths}
+            sizes="(min-width: 60rem) 32rem, 92vw"
+            loading="lazy"
+          />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .venue {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .venue__name {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+  }
+
+  @media (min-width: 60rem) {
+    .venue--with-photo {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+    }
+  }
+</style>

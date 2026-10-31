@@ -1,0 +1,36 @@
+---
+import { RSVP_FORM_URL } from '../lib/invitation';
+import RsvpButton from './RsvpButton.astro';
+
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+---
+
+<section
+  class="invitation-section rsvp"
+  id="rsvp"
+  aria-labelledby="rsvp-heading"
+>
+  <div class="container invitation-stack" data-reveal>
+    <p class="eyebrow">{t('rsvp.eyebrow')}</p>
+    <h2 class="section-heading" id="rsvp-heading">{t('rsvp.heading')}</h2>
+    <p class="measure">{t('rsvp.body')}</p>
+    <p class="detail-note">{t('rsvp.deadline')}</p>
+    <RsvpButton t={t} section />
+    {!RSVP_FORM_URL && <p id="rsvp-pending">{t('rsvp.pending')}</p>}
+  </div>
+</section>
+
+<style>
+  .rsvp {
+    background: var(--bg-sink);
+    text-align: center;
+  }
+
+  .rsvp .invitation-stack {
+    align-items: center;
+  }
+</style>

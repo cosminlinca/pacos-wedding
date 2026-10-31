@@ -4,6 +4,7 @@ import { formatWeddingDate } from '../lib/datetime';
 import Figure from './Figure.astro';
 import Countdown from './Countdown.astro';
 import AddToCalendar from './AddToCalendar.astro';
+import RsvpButton from './RsvpButton.astro';
 import ScrollCue from './ScrollCue.astro';
 import couplePhoto from '../assets/couple-path.jpg';
 
@@ -69,7 +70,9 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     </div>
 
     <div class="hero__cta" data-reveal style="--reveal-index: 4">
+      <RsvpButton t={t} />
       <AddToCalendar locale={locale} t={t} />
+      <p class="hero__deadline">{t('rsvp.deadline')}</p>
     </div>
   </div>
 
@@ -217,6 +220,19 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     bottom: clamp(1.25rem, 0.5rem + 3vh, 2.5rem);
     transform: translateX(-50%);
     z-index: 1;
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+  }
+
+  .hero__deadline {
+    flex-basis: 100%;
+    font-size: var(--step--1);
   }
 
   @media (max-width: 22rem) {

@@ -17,6 +17,7 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scrollbar-gutter: stable;
+  scroll-padding-top: 9rem;
 }
 
 body {
@@ -84,6 +85,65 @@ h3 {
 
 .measure {
   max-width: var(--measure);
+}
+
+.invitation-section {
+  padding-block: clamp(4rem, 2rem + 8vw, 7rem);
+}
+
+.invitation-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-lg);
+}
+
+.section-heading {
+  font-size: var(--step-2);
+}
+
+.detail-note {
+  color: var(--ink-soft);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.75em 1.4em;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: var(--accent-ink);
+}
+
+.button--outline {
+  color: var(--accent-ink);
+  background: transparent;
+}
+
+.button--outline:hover {
+  background: var(--bg-sink);
+}
+
+.button:disabled {
+  background: var(--bg-sink);
+  color: var(--ink-soft);
+  border-color: var(--brass-soft);
+  cursor: not-allowed;
 }
 
 /* Visually hidden but available to assistive tech. */
