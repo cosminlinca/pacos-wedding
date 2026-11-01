@@ -10,18 +10,6 @@ export const VENUE_MAPS_URL =
 // Source: https://wonderland.ro/wp-content/uploads/2020/09/Evenimente-O-sala-pentru-un-public-Riviera.jpg
 export const VENUE_PHOTO: ImageMetadata | undefined = venuePhoto;
 
-interface StoryEntry {
-  id: string;
-  photo?: ImageMetadata;
-}
-
-// Add imported photos here; entries without a photo stay hidden.
-// Each id has matching story.<id>.year/caption/alt keys in both locales.
-export const STORY_ENTRIES: StoryEntry[] = [
-  { id: '1' },
-  { id: '2' },
-  { id: '3' },
-  { id: '4' },
-  { id: '5' },
-  { id: '6' },
-];
+// Chapters in chronological order. Photos live in src/assets/story/<id>/ and
+// are shown in filename order; titles are the story.<id>.title i18n keys.
+export const STORY_CHAPTERS = ['1', '2', '3', '4'];

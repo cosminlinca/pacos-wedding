@@ -1,16 +1,24 @@
 ---
-import { STORY_ENTRIES } from '../lib/invitation';
+import type { ImageMetadata } from 'astro';
+import { STORY_CHAPTERS } from '../lib/invitation';
 import Figure from './Figure.astro';
-import couplePhoto from '../assets/couple-path.jpg';
 
 interface Props {
   t: (key: string) => string;
 }
 
 const { t } = Astro.props;
-const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
-  photo ? [{ id, photo }] : []
+const modules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/story/*/*.jpg',
+  { eager: true }
 );
+const chapters = STORY_CHAPTERS.map((id) => ({
+  id,
+  photos: Object.entries(modules)
+    .filter(([path]) => path.includes(`/story/${id}/`))
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, mod]) => mod.default),
+})).filter(({ photos }) => photos.length > 0);
 ---
 
 <section class="invitation-section" id="story" aria-labelledby="story-heading">
@@ -20,51 +28,89 @@ const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
       {t('story.heading')}
     </h2>
     <p class="measure detail-note" data-reveal>{t('portrait.body')}</p>
-    {
-      entries.length > 0 ? (
-        <ol class="story__timeline" role="list">
-          {entries.map(({ id, photo }) => (
-            <li class="story__entry">
-              <p class="story__year eyebrow" data-reveal>
-                {t(`story.${id}.year`)}
-              </p>
-              <div class="invitation-stack" data-reveal>
-                <Figure
-                  framed
-                  src={photo}
-                  alt={t(`story.${id}.alt`)}
-                  widths={[480, 720, 960].filter(
-                    (width) => width <= photo.width
-                  )}
-                  sizes="(min-width: 60rem) 42rem, 85vw"
-                  loading="lazy"
-                />
-                <p>{t(`story.${id}.caption`)}</p>
+    <ol class="story__timeline" role="list">
+      {
+        chapters.map(({ id, photos }, index) => (
+          <li class="story__entry">
+            <details class="book story__chapter" data-reveal>
+              <summary class="book__cover">
+                <span class="book__number">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 class="book__title">{t(`story.${id}.title`)}</h3>
+                <span class="book__hint">{t('story.open')}</span>
+              </summary>
+              <div class="book__inside">
+                <ul class="book__pages" role="list" tabindex="0">
+                  {photos.map((photo) => (
+                    <li class="book__page">
+                      <div class="story__polaroid">
+                        <Figure
+                          src={photo}
+                          alt={t('story.gallery.alt')}
+                          ratio="1 / 1"
+                          widths={[360, 540, 720]}
+                          sizes="(min-width: 45rem) 22rem, 80vw"
+                          quality={65}
+                          loading="lazy"
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <div class="book__nav">
+                  <button
+                    type="button"
+                    class="book__arrow"
+                    data-dir="-1"
+                    aria-label={t('story.prev')}
+                  >
+                    ‹
+                  </button>
+                  <span class="book__count" aria-live="polite">
+                    1 / {photos.length}
+                  </span>
+                  <button
+                    type="button"
+                    class="book__arrow"
+                    data-dir="1"
+                    aria-label={t('story.next')}
+                  >
+                    ›
+                  </button>
+                </div>
               </div>
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <div class="story__preview" data-reveal>
-          <Figure
-            framed
-            src={couplePhoto}
-            alt={t('portrait.alt')}
-            ratio="9 / 16"
-            widths={[360, 540, 720, 900]}
-            sizes="(min-width: 45rem) 23rem, 85vw"
-            quality={60}
-            loading="lazy"
-          />
-          <div class="invitation-stack">
-            <p class="story__lead">{t('portrait.lead')}</p>
-            <p class="detail-note">{t('story.pending')}</p>
-          </div>
-        </div>
-      )
-    }
+            </details>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.book').forEach((book) => {
+    const pages = book.querySelector<HTMLElement>('.book__pages');
+    const count = book.querySelector<HTMLElement>('.book__count');
+    if (!pages || !count) return;
+    const items = pages.children.length;
+    const update = () => {
+      const width = pages.scrollWidth / items;
+      const index = Math.min(items, Math.round(pages.scrollLeft / width) + 1);
+      count.textContent = `${index} / ${items}`;
+    };
+    pages.addEventListener('scroll', update, { passive: true });
+    book.querySelectorAll<HTMLButtonElement>('.book__arrow').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const step = pages.scrollWidth / items;
+        pages.scrollBy({
+          left: Number(btn.dataset.dir) * step,
+          behavior: 'smooth',
+        });
+      });
+    });
+  });
+</script>
 
 <style>
   .story__timeline {
@@ -77,8 +123,6 @@ const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
 
   .story__entry {
     position: relative;
-    display: grid;
-    gap: var(--space-lg);
   }
 
   .story__entry + .story__entry {
@@ -88,7 +132,7 @@ const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
   .story__entry::before {
     content: '';
     position: absolute;
-    top: var(--space-xs);
+    top: var(--space-xl);
     left: calc(-1 * var(--space-lg) - 0.3rem);
     width: 0.6rem;
     height: 0.6rem;
@@ -96,36 +140,170 @@ const entries = STORY_ENTRIES.flatMap(({ id, photo }) =>
     background: var(--accent);
   }
 
-  .story__entry :global(.figure) {
-    width: 100%;
+  .book {
+    max-width: 46rem;
+    perspective: 1400px;
   }
 
-  .story__preview {
+  .book__cover {
+    position: relative;
     display: grid;
-    align-items: center;
-    gap: var(--space-xl);
-    width: 100%;
-    margin-top: var(--space-lg);
+    gap: var(--space-xs);
+    padding: var(--space-xl) var(--space-xl) var(--space-xl)
+      calc(var(--space-xl) + 1rem);
+    cursor: pointer;
+    list-style: none;
+    color: var(--bg);
+    background: linear-gradient(
+      135deg,
+      var(--accent) 0%,
+      var(--accent-ink) 100%
+    );
+    border-radius: 3px 10px 10px 3px;
+    box-shadow:
+      inset 0.9rem 0 0 rgb(0 0 0 / 0.22),
+      inset 1rem 0 0 rgb(255 255 255 / 0.08),
+      0 0.75rem 1.5rem rgb(var(--accent-rgb) / 0.28);
+    transition: transform 320ms var(--ease-editorial);
   }
 
-  .story__preview :global(.figure) {
-    width: min(100%, 23rem);
+  .book__cover::before {
+    content: '';
+    position: absolute;
+    inset: var(--space-sm) var(--space-sm) var(--space-sm)
+      calc(var(--space-sm) + 1rem);
+    border: 1px solid rgb(var(--bg-rgb) / 0.35);
+    border-radius: 2px;
+    pointer-events: none;
   }
 
-  .story__lead {
+  .book__cover::-webkit-details-marker {
+    display: none;
+  }
+
+  .book__cover:hover,
+  .book__cover:focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .book__number {
+    font-size: var(--step--1);
+    letter-spacing: 0.3em;
+    opacity: 0.7;
+  }
+
+  .book__title {
     font-family: var(--font-display);
     font-size: var(--step-2);
-    line-height: 1.2;
+    line-height: 1.15;
+  }
+
+  .book__hint {
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .book__hint::after {
+    content: ' →';
+  }
+
+  .book[open] .book__cover {
+    transform: none;
+    border-radius: 3px 10px 0 0;
+  }
+
+  .book[open] .book__hint {
+    visibility: hidden;
+  }
+
+  .book__inside {
+    padding: var(--space-lg) var(--space-sm) var(--space-md);
+    background:
+      linear-gradient(90deg, rgb(var(--accent-rgb) / 0.14), transparent 3rem),
+      var(--bg-sink);
+    border-radius: 0 0 10px 3px;
+    box-shadow: 0 0.75rem 1.5rem rgb(var(--accent-rgb) / 0.18);
+    transform-origin: top center;
+  }
+
+  .book__pages {
+    display: flex;
+    margin: 0;
+    padding: var(--space-md) 0;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .book__pages::-webkit-scrollbar {
+    display: none;
+  }
+
+  .book__page {
+    flex: 0 0 100%;
+    display: grid;
+    place-items: center;
+    padding: var(--space-sm) var(--space-lg);
+    scroll-snap-align: center;
+  }
+
+  .story__polaroid {
+    width: min(100%, 22rem);
+    padding: var(--space-sm) var(--space-sm) var(--space-xl);
+    background: #fffdf8;
+    box-shadow:
+      0 1px 2px rgb(var(--accent-rgb) / 0.18),
+      0 0.75rem 1.5rem rgb(var(--accent-rgb) / 0.16);
+  }
+
+  .book__page:nth-child(odd) .story__polaroid {
+    transform: rotate(-1.5deg);
+  }
+
+  .book__page:nth-child(even) .story__polaroid {
+    transform: rotate(1.2deg);
+  }
+
+  .story__polaroid :global(.figure) {
+    width: 100%;
+  }
+
+  .book__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+  }
+
+  .book__arrow {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--accent-soft);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .book__arrow:hover {
+    background: rgb(var(--accent-rgb) / 0.08);
+  }
+
+  .book__count {
+    min-width: 4rem;
+    text-align: center;
+    font-size: var(--step--1);
+    letter-spacing: 0.1em;
   }
 
   @media (min-width: 45rem) {
-    .story__preview {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-2xl);
-    }
-
-    .story__entry {
-      grid-template-columns: 10rem 1fr;
+    .book__page {
+      flex-basis: 50%;
     }
   }
 </style>

@@ -61,13 +61,9 @@ mismatched key sets so both languages must be updated together.
   assign it to `VENUE_PHOTO`. Update `venue.photoAlt` in both languages.
   The photo block stays hidden until supplied. `VENUE_MAPS_URL` currently
   searches for the known venue; replace it with its exact listing if needed.
-- Import 6–8 story photos in the same config file and assign a `photo` to
-  each `STORY_ENTRIES` entry in chronological order. Six slots are prepared;
-  to add a seventh or eighth, add its id and matching
-  `story.<id>.year`, `story.<id>.caption` and `story.<id>.alt` keys to both JSON
-  files. Replace placeholder copy when adding each photo. Entries without
-  photos stay hidden; until the first is supplied, the existing engagement
-  portrait and a pending note are shown instead of an empty timeline.
+- Story chapters: drop photos in `src/assets/story/<id>/` (shown in filename
+  order) and add the chapter title as `story.<id>.title` in both JSON files.
+  To add a chapter, append its id to `STORY_CHAPTERS` in `src/lib/invitation.ts`.
 
 New invitation copy is draft wording for the couple to approve before launch.
 The site has no analytics, uses `noindex, nofollow`, and disallows crawling in

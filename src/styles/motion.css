@@ -23,6 +23,24 @@
   }
 }
 
+/* Story books: the pages unfold from the cover when a chapter is opened. */
+@media (prefers-reduced-motion: no-preference) {
+  .book[open] .book__inside {
+    animation: book-open 640ms var(--ease-editorial) both;
+  }
+}
+
+@keyframes book-open {
+  from {
+    opacity: 0;
+    transform: rotateX(-75deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Scroll cue bob. */
 @media (prefers-reduced-motion: no-preference) {
   .scroll-cue__chevron {
