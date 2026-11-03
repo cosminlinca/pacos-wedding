@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../lib/i18n';
 import { remainingUntilWedding } from '../lib/datetime';
+import { GALLERY_URL } from '../lib/invitation';
 
 interface Props {
   locale: Locale;
@@ -21,7 +22,14 @@ const units = [
 ];
 ---
 
-<section class="countdown" aria-labelledby="countdown-heading">
+<section
+  class="countdown"
+  aria-labelledby="countdown-heading"
+  data-tab-title={t('countdown.tabTitle')}
+  data-tab-title-one={t('countdown.tabTitleOne')}
+  data-tab-title-soon={t('countdown.tabTitleSoon')}
+  data-tab-title-today={t('countdown.tabTitleToday')}
+>
   <h2 id="countdown-heading" class="eyebrow countdown__heading">
     {t('countdown.heading')}
   </h2>
@@ -40,6 +48,18 @@ const units = [
   </ol>
 
   <p class="countdown__fallback">{t('countdown.fallback')}</p>
+
+  <div class="countdown__after" data-countdown-after hidden>
+    <p class="countdown__message" data-today>{t('countdown.passed')}</p>
+    <p class="countdown__message" data-thanks hidden>{t('countdown.thanks')}</p>
+    {
+      GALLERY_URL && (
+        <a class="button" href={GALLERY_URL} data-gallery hidden>
+          {t('countdown.gallery')}
+        </a>
+      )
+    }
+  </div>
 </section>
 
 <style>
@@ -94,6 +114,28 @@ const units = [
     color: var(--ink-soft);
   }
 
+  .countdown__list[hidden],
+  .countdown__heading[hidden] {
+    display: none;
+  }
+
+  .countdown__after {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .countdown__after[hidden] {
+    display: none;
+  }
+
+  .countdown__message {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--accent-ink);
+  }
+
   .countdown__fallback {
     display: none;
     font-family: var(--font-display);
@@ -112,10 +154,51 @@ const units = [
 </style>
 
 <script>
-  import { remainingUntilWedding } from '../lib/datetime';
+  import { remainingUntilWedding, WEDDING } from '../lib/datetime';
 
   const root = document.querySelector<HTMLElement>('[data-countdown]');
-  if (root) {
+  const after = document.querySelector<HTMLElement>('[data-countdown-after]');
+  const DAY = 24 * 60 * 60 * 1000;
+
+  // Episode-style tab title ("The One With 290 Days to Go"). The real <title>
+  // stays for search engines and link previews; this only runs in the browser.
+  const titles = root?.closest<HTMLElement>('.countdown')?.dataset;
+  const setTabTitle = (next: string | undefined) => {
+    if (next && document.title !== next) document.title = next;
+  };
+  const tabTitleFor = (days: number) =>
+    days > 1
+      ? titles?.tabTitle?.replace('{n}', String(days))
+      : days === 1
+        ? titles?.tabTitleOne
+        : titles?.tabTitleSoon;
+
+  // On the day: "Today is the day." From the next day: a thank-you note and,
+  // if GALLERY_URL is set, a link to the photos.
+  const showAfter = () => {
+    if (!root || !after) return;
+    root.hidden = true;
+    // Episode title on the day itself; from the next day, the normal title.
+    if (Date.now() < WEDDING.getTime() + DAY)
+      setTabTitle(titles?.tabTitleToday);
+    after.hidden = false;
+    document.getElementById('countdown-heading')?.setAttribute('hidden', '');
+    if (Date.now() >= WEDDING.getTime() + DAY) {
+      after
+        .querySelector<HTMLElement>('[data-today]')
+        ?.setAttribute('hidden', '');
+      after
+        .querySelector<HTMLElement>('[data-thanks]')
+        ?.removeAttribute('hidden');
+      after
+        .querySelector<HTMLElement>('[data-gallery]')
+        ?.removeAttribute('hidden');
+    }
+  };
+
+  if (root && remainingUntilWedding().passed) {
+    showAfter();
+  } else if (root) {
     const cells = new Map<string, HTMLElement>();
     root.querySelectorAll<HTMLElement>('[data-unit]').forEach((el) => {
       if (el.dataset.unit) cells.set(el.dataset.unit, el);
@@ -138,6 +221,7 @@ const units = [
 
     const tick = () => {
       const r = remainingUntilWedding(new Date());
+      setTabTitle(tabTitleFor(r.days));
       const now: Record<string, string> = {
         days: String(r.days),
         hours: pad(r.hours),
@@ -149,6 +233,7 @@ const units = [
     };
 
     const loop = () => {
+      if (remainingUntilWedding().passed) return showAfter();
       tick();
       // Re-align to the next whole second to avoid drift / double updates.
       window.setTimeout(loop, 1000 - (Date.now() % 1000));

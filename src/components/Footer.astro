@@ -10,7 +10,7 @@ interface Props {
 const { locale, t } = Astro.props;
 ---
 
-<footer class="site-footer">
+<footer class="site-footer theme-purple">
   <div class="container site-footer__inner">
     <p class="site-footer__line">
       <span class="site-footer__monogram">
@@ -38,6 +38,7 @@ const { locale, t } = Astro.props;
 <style>
   .site-footer {
     padding-block: clamp(2.5rem, 1.5rem + 6vw, 4.5rem);
+    border-top: 3px solid var(--frame);
   }
 
   .site-footer__inner {
@@ -67,7 +68,11 @@ const { locale, t } = Astro.props;
   }
 
   .site-footer__dot {
-    color: var(--accent);
+    color: var(--dot-1);
+  }
+
+  .site-footer__dot + span + .site-footer__dot {
+    color: var(--dot-3);
   }
 
   .site-footer__note {

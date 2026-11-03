@@ -1,12 +1,12 @@
 # Copilot instructions
 
-Static bilingual (RO default, EN) save-the-date site for a wedding. Astro 5 + TypeScript + plain CSS, no UI framework. Deployed to GitHub Pages. See `README.md` for editing guides and `PLAN.md` for design decisions.
+Static bilingual (RO default, EN) wedding invitation site. Astro 7 + TypeScript + plain CSS, no UI framework. Deployed to GitHub Pages. See `README.md` for editing guides and `PLAN.md` for design decisions.
 
 ## Commands
 
 ```bash
 npm run dev       # http://localhost:4321/pacos-wedding/ (base prefix required even in dev)
-npm run build     # `astro check && astro build` → dist/  (this is what CI runs)
+npm run build     # i18n key check + `astro check` + `astro build` → dist/  (CI runs lint, then this)
 npm run check     # type check only (astro check)
 npm run lint      # ESLint (.js,.mjs,.ts,.astro)
 npm run format    # Prettier (with prettier-plugin-astro)
@@ -27,6 +27,6 @@ There is no test suite. Validate with `npm run build` and `npm run lint`. Node �
 
 - **Always use `withBase()` from `src/lib/paths.ts`** for internal links, asset URLs, favicon, OG and `.ics` links. The site is served under `base: '/pacos-wedding'`; a hard-coded `/foo` 404s in production. Use `switchLocalePath()` for language toggling.
 - Motion is CSS-only, gated by `prefers-reduced-motion: no-preference`, must not hide content without JS, and scroll-timeline effects sit inside `@supports`. Keep new animations in `motion.css` following this pattern.
-- The engagement photo (`src/assets/couple-path.jpg`) is imported separately in `Hero.astro` and `Portrait.astro`; swapping it means changing both imports.
+- The engagement photo (`src/assets/couple-path.jpg`) is imported only in `Hero.astro`. Story photos are globbed from `src/assets/story/<id>/` in `OurStory.astro`.
 - Prettier is configured in `.prettierrc.json`; run `npm run format` rather than hand-formatting.
 - Deploys automatically on push to `main` via `.github/workflows/deploy.yml`.

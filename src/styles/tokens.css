@@ -1,30 +1,48 @@
 /*
- * Design tokens — Lane A, warm editorial.
+ * Design tokens — a nod to Friends: purple-door walls, the yellow peephole
+ * frame, the orange coffee-house couch and the red/yellow/blue logo dots.
  * Light only for the teaser; a dark variant slots in under a media query or
  * [data-theme="dark"] later without touching component CSS.
  */
 
 :root {
   /* ---- colour ---- */
-  --bg: #f6f1e7; /* warm ivory */
-  --bg-sink: #efe7d7; /* slightly deeper panel */
-  --ink: #23231f; /* near-black text */
+  --bg: #fbf4e6; /* warm cream */
+  --bg-sink: #f1e8f4; /* pale lavender panel */
+  --ink: #2b1f17; /* espresso */
   --ink-soft: color-mix(
     in srgb,
     var(--ink) 75%,
     var(--bg)
   ); /* secondary text */
-  --accent: #2f3d33; /* forest green — swap here for oxblood / cocoa */
-  --accent-ink: #1e2721; /* darker green for text on ivory */
+  --accent: #6a4c93; /* apartment purple */
+  --accent-ink: #4b3270; /* darker purple for text on cream */
   --accent-soft: rgb(var(--accent-rgb) / 0.28); /* faint rules and borders */
+  --amp: #c2602b; /* couch orange, ampersands and flourishes */
   --focus: var(--accent);
 
-  --bg-rgb: 246 241 231;
-  --accent-rgb: 47 61 51;
+  --bg-rgb: 251 244 230;
+  --accent-rgb: 106 76 147;
+
+  /* Fixed brand colours — never re-themed. */
+  --purple: #5c3f86;
+  --purple-deep: #3f2a62;
+  --frame: #f2c230; /* peephole-frame yellow */
+  --frame-shade: #c9971a;
+  --cream: #fbf4e6;
+  --dot-1: #e8412f; /* red */
+  --dot-2: #f6c443; /* yellow */
+  --dot-3: #3f8ef0; /* blue */
 
   /* ---- type families ---- */
   --font-display:
     'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-logo:
+    'Oswald Variable', 'Oswald', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+  /* The couple's names only: no Romanian diacritics in this font. */
+  --font-names:
+    'Gabriel Weiss Friends', 'Oswald Variable', 'Oswald', 'Arial Narrow',
+    sans-serif;
   --font-body:
     'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto,
     sans-serif;
@@ -50,7 +68,8 @@
   /* ---- structure ---- */
   --measure: 62ch;
   --container: min(92vw, 68rem);
-  --radius: 2px;
+  --radius: 6px;
+  --radius-pill: 999px;
   --rule: 1px solid var(--accent);
   --hairline: 1px solid var(--accent-soft);
 

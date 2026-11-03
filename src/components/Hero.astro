@@ -15,64 +15,81 @@ interface Props {
 
 const { locale, t } = Astro.props;
 const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
+// "Pati" → ["P", "A", "T", "I"]; the dots are drawn between the letters.
+const letters = (word: string) => Array.from(word.toLocaleUpperCase(locale));
 ---
 
-<section class="hero" aria-labelledby="couple">
-  <div class="hero__media" aria-hidden="true">
-    <div class="hero__media-inner">
-      {
-        /* Decorative: the same photo, blurred to a warm wash. The readable
-          version lives in the Portrait section, so alt is empty here. */
-      }
-      <Figure
-        fill
-        src={couplePhoto}
-        alt=""
-        position="50% 56%"
-        widths={[480, 720, 900]}
-        sizes="100vw"
-        quality={68}
-        loading="eager"
-        class="hero__figure"
-      />
-    </div>
-    <div class="hero__scrim"></div>
-  </div>
-
+<section class="hero theme-purple" aria-labelledby="couple">
   <div class="container hero__content">
-    <p class="eyebrow hero__eyebrow" data-reveal style="--reveal-index: 0">
-      {t('hero.eyebrow')}
-    </p>
+    <div class="hero__text">
+      <p class="eyebrow hero__eyebrow" data-reveal style="--reveal-index: 0">
+        {t('hero.eyebrow')}
+      </p>
 
-    <h1 class="hero__names" id="couple" data-motion>
-      <span class="hero__name">
-        <span class="hero__rise" style="--i: 0">{t('hero.nameA')}</span>
-      </span>
-      <span class="hero__pair">
-        <span class="hero__amp couple-amp">
-          <span class="hero__rise" style="--i: 1">{t('hero.and')}</span>
+      <h1 class="hero__names dotted" id="couple" data-motion>
+        <span class="visually-hidden">{t('hero.names')}</span>
+        <span class="hero__name" aria-hidden="true">
+          <span class="hero__rise" style="--i: 0">
+            {
+              letters(t('hero.nameA')).map((letter, index) => (
+                <>
+                  {index > 0 && <span class="dotted__dot" />}
+                  {letter}
+                </>
+              ))
+            }
+          </span>
         </span>
-        <span class="hero__name">
-          <span class="hero__rise" style="--i: 2">{t('hero.nameB')}</span>
+        <span class="hero__pair" aria-hidden="true">
+          <span class="hero__amp couple-amp">
+            <span class="hero__rise" style="--i: 1">{t('hero.and')}</span>
+          </span>
+          <span class="hero__name">
+            <span class="hero__rise" style="--i: 2">
+              {
+                letters(t('hero.nameB')).map((letter, index) => (
+                  <>
+                    {index > 0 && <span class="dotted__dot" />}
+                    {letter}
+                  </>
+                ))
+              }
+            </span>
+          </span>
         </span>
-      </span>
-    </h1>
+      </h1>
 
-    <div class="hero__meta" data-reveal style="--reveal-index: 2">
-      <p class="hero__date">{t('hero.date')}</p>
-      <hr class="rule" />
-      <p class="hero__place">{t('hero.place')}</p>
-      <p class="hero__sentence">{dateSentence}</p>
+      <div class="hero__meta" data-reveal style="--reveal-index: 2">
+        <p class="hero__date">{t('hero.date')}</p>
+        <hr class="rule" />
+        <p class="hero__place">{t('hero.place')}</p>
+        <p class="hero__sentence">{dateSentence}</p>
+      </div>
+
+      <div class="hero__countdown" data-reveal style="--reveal-index: 3">
+        <Countdown locale={locale} t={t} />
+      </div>
+
+      <div class="hero__cta" data-reveal style="--reveal-index: 4">
+        <RsvpButton t={t} />
+        <AddToCalendar locale={locale} t={t} />
+        <p class="hero__deadline">{t('rsvp.deadline')}</p>
+      </div>
     </div>
 
-    <div class="hero__countdown" data-reveal style="--reveal-index: 3">
-      <Countdown locale={locale} t={t} />
-    </div>
-
-    <div class="hero__cta" data-reveal style="--reveal-index: 4">
-      <RsvpButton t={t} />
-      <AddToCalendar locale={locale} t={t} />
-      <p class="hero__deadline">{t('rsvp.deadline')}</p>
+    <div class="hero__photo" data-reveal style="--reveal-index: 1">
+      <div class="peephole">
+        <Figure
+          src={couplePhoto}
+          alt={t('hero.photoAlt')}
+          ratio="4 / 5"
+          position="50% 58%"
+          widths={[360, 540, 720, 900]}
+          sizes="(min-width: 60rem) 26rem, 72vw"
+          quality={74}
+          loading="eager"
+        />
+      </div>
     </div>
   </div>
 
@@ -88,43 +105,21 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     flex-direction: column;
     justify-content: center;
     min-height: 100svh;
-    padding-block: clamp(5.5rem, 3.5rem + 10vh, 8rem)
-      clamp(4rem, 2.5rem + 7vh, 6rem);
+    padding-block: clamp(3rem, 2rem + 6vh, 6rem) clamp(5rem, 3.5rem + 7vh, 7rem);
     overflow: hidden;
     isolation: isolate;
   }
 
-  .hero__media {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-  }
-
-  /* Generous bleed: the blur radius and the Ken Burns drift both eat into the
-     edges, and neither may ever expose the page background. */
-  .hero__media-inner {
-    position: absolute;
-    inset: -10%;
-    will-change: transform;
-  }
-
-  .hero__media-inner :global(.figure__img) {
-    filter: blur(9px) saturate(0.95);
-    transform: scale(1.06);
-  }
-
-  .hero__scrim {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      90% 70% at 50% 42%,
-      rgb(var(--bg-rgb) / 0.42),
-      rgb(var(--bg-rgb) / 0.66) 70%,
-      rgb(var(--bg-rgb) / 0.86) 100%
-    );
-  }
-
   .hero__content {
+    display: grid;
+    justify-items: center;
+    gap: clamp(2rem, 1.5rem + 3vw, 3.5rem);
+  }
+
+  /* A size container, so the names can scale to fit its width. */
+  .hero__text {
+    container-type: inline-size;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -132,29 +127,37 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     text-align: center;
   }
 
+  .hero__photo {
+    width: min(72vw, 20rem);
+  }
+
+  .hero__photo .peephole {
+    rotate: 2deg;
+  }
+
   .hero__eyebrow {
     margin: 0;
   }
 
+  /* Always one line: the size tracks the column width (≈8.3em of lettering),
+     capped at the display step on wide screens. */
   .hero__names {
     margin: 0;
-    font-optical-sizing: auto;
-    font-variation-settings:
-      'SOFT' 40,
-      'WONK' 1,
-      'opsz' 144;
-    font-size: var(--step-4);
-    font-weight: 380;
-    letter-spacing: -0.01em;
+    font-size: min(var(--step-4), 11.5cqi);
+    line-height: 1;
     color: var(--ink);
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: baseline;
-    gap: 0.08em 0.28em;
+    gap: 0.28em;
+    white-space: nowrap;
   }
 
-  /* Keeps the break as "Pati" / "& Cos" — the ampersand never orphans. */
+  .hero__amp {
+    font-size: 0.8em;
+  }
+
   .hero__pair {
     display: inline-flex;
     align-items: baseline;
@@ -162,18 +165,20 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     white-space: nowrap;
   }
 
-  /* Masks for the rise-in: the padding gives ascenders and descenders room,
-     the matching negative margin keeps the baselines exactly where they were. */
+  /* Masks for the rise-in: the padding gives ascenders, descenders and the
+     slanted letters' overhang room; the matching negative margin keeps the
+     layout exactly where it was. */
   .hero__name,
   .hero__amp {
     display: block;
     overflow: hidden;
-    padding-block: 0.14em 0.2em;
-    margin-block: -0.14em -0.2em;
+    padding: 0.14em 0.12em 0.2em;
+    margin: -0.14em -0.12em -0.2em;
   }
 
   .hero__rise {
     display: block;
+    white-space: nowrap;
   }
 
   .hero__meta {
@@ -191,18 +196,14 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
     color: var(--accent-ink);
   }
 
-  /* Full-strength ink rather than --ink-soft: these sit over the thinnest part
-     of the scrim, where the softer grey washed out. No shadow — they should
-     read exactly like the rest of the hero type. */
   .hero__place {
     font-size: var(--step-0);
-    color: var(--ink);
     letter-spacing: 0.02em;
   }
 
   .hero__sentence {
     font-size: var(--step--1);
-    color: var(--ink);
+    color: var(--ink-soft);
   }
 
   .hero__cue {
@@ -224,16 +225,17 @@ const dateSentence = t('hero.dateSentence') || formatWeddingDate(locale);
   .hero__deadline {
     flex-basis: 100%;
     font-size: var(--step--1);
+    color: var(--ink-soft);
   }
 
-  @media (max-width: 22rem) {
-    .hero__names {
-      flex-direction: column;
-      gap: 0.05em;
+  @media (min-width: 60rem) {
+    .hero__content {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      align-items: center;
     }
 
-    .hero__pair {
-      justify-content: center;
+    .hero__photo {
+      width: min(100%, 26rem);
     }
   }
 </style>

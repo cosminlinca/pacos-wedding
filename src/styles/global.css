@@ -3,6 +3,17 @@
 @import './tokens.css';
 @import './motion.css';
 
+/* Gabriel Weiss' Friends Font — freeware, non-commercial; see
+   assets/fonts/gabriel-weiss-friends-LICENSE.txt. Subset to basic Latin. */
+@font-face {
+  font-family: 'Gabriel Weiss Friends';
+  src: url('../assets/fonts/gabriel-weiss-friends.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E;
+}
+
 *,
 *::before,
 *::after {
@@ -113,7 +124,7 @@ h3 {
   min-height: 44px;
   padding: 0.75em 1.4em;
   border: 1px solid var(--accent);
-  border-radius: var(--radius);
+  border-radius: var(--radius-pill);
   background: var(--accent);
   color: var(--bg);
   font-family: var(--font-body);
@@ -178,15 +189,129 @@ h3 {
   transform: translateY(0);
 }
 
-/* ---- small caps eyebrow ---- */
+/* ---- eyebrow: an episode-title tag led by the three logo dots ---- */
 .eyebrow {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9em;
+  font-family: var(--font-logo);
   font-size: var(--step--1);
   font-weight: 500;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--accent-ink);
+}
+
+.eyebrow::before {
+  content: '';
+  flex: none;
+  width: 2.1em;
+  height: 0.45em;
+  background:
+    radial-gradient(circle, var(--dot-1) 0 60%, transparent 64%) 0 50% / 0.45em
+      0.45em no-repeat,
+    radial-gradient(circle, var(--dot-2) 0 60%, transparent 64%) 50% 50% /
+      0.45em 0.45em no-repeat,
+    radial-gradient(circle, var(--dot-3) 0 60%, transparent 64%) 100% 50% /
+      0.45em 0.45em no-repeat;
+}
+
+/* Logo-style lettering: P·A·T·I, with the dots cycling red, yellow, blue. */
+.dotted {
+  font-family: var(--font-names);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.dotted__dot {
+  display: inline-block;
+  width: 0.13em;
+  height: 0.13em;
+  margin-inline: 0.12em;
+  border-radius: 50%;
+  vertical-align: 0.38em;
+  background: var(--dot-1);
+}
+
+.dotted__dot:nth-of-type(3n + 2) {
+  background: var(--dot-2);
+}
+
+.dotted__dot:nth-of-type(3n) {
+  background: var(--dot-3);
+}
+
+/* Purple-wall panel: re-points the tokens so every component inside (text,
+   buttons, countdown, calendar menu) flips to cream on purple with yellow
+   accents, without component-level overrides. */
+.theme-purple {
+  --bg: var(--purple);
+  --bg-sink: var(--purple-deep);
+  --bg-rgb: 92 63 134;
+  --ink: var(--cream);
+  --ink-soft: color-mix(in srgb, var(--cream) 82%, var(--purple));
+  --accent: var(--frame);
+  --accent-ink: var(--frame);
+  --accent-rgb: 242 194 48;
+  --accent-soft: rgb(242 194 48 / 0.4);
+  --amp: var(--frame);
+  --focus: var(--frame);
+
+  color: var(--ink);
+  background:
+    radial-gradient(
+      120% 80% at 50% 0%,
+      rgb(255 255 255 / 0.1),
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.035) 0 2px,
+      transparent 2px 9px
+    ),
+    var(--purple);
+}
+
+.theme-purple .button:not(:disabled) {
+  color: var(--purple-deep);
+}
+
+.theme-purple .button:not(:disabled):hover {
+  background: #ffd75a;
+}
+
+.theme-purple .button--outline:not(:disabled) {
+  color: var(--frame);
+}
+
+.theme-purple .button--outline:not(:disabled):hover {
+  background: var(--frame);
+  color: var(--purple-deep);
+}
+
+/* The yellow peephole frame around a photo. */
+.peephole {
+  position: relative;
+  padding: clamp(0.6rem, 0.4rem + 1vw, 1rem);
+  border-radius: 50% / 46%;
+  background:
+    radial-gradient(
+      60% 50% at 30% 20%,
+      rgb(255 255 255 / 0.45),
+      transparent 70%
+    ),
+    var(--frame);
+  box-shadow:
+    inset 0 0 0 3px var(--frame-shade),
+    0 0 0 3px var(--frame-shade),
+    0 1.5rem 3rem rgb(0 0 0 / 0.35);
+}
+
+.peephole > * {
+  overflow: hidden;
+  border-radius: 50% / 46%;
+  box-shadow: 0 0 0 3px var(--frame-shade);
 }
 
 .couple-amp {
@@ -199,15 +324,21 @@ h3 {
   font-size: 0.75em;
   font-weight: 400;
   font-style: italic;
-  color: var(--accent);
+  color: var(--amp);
 }
 
-/* ---- accent rule ---- */
+/* ---- accent rule: three logo dots ---- */
 .rule {
-  width: 3.5rem;
-  height: 0;
+  width: 2.6rem;
+  height: 0.55rem;
   border: 0;
-  border-top: var(--rule);
+  background:
+    radial-gradient(circle, var(--dot-1) 0 60%, transparent 64%) 0 50% / 0.55rem
+      0.55rem no-repeat,
+    radial-gradient(circle, var(--dot-2) 0 60%, transparent 64%) 50% 50% /
+      0.55rem 0.55rem no-repeat,
+    radial-gradient(circle, var(--dot-3) 0 60%, transparent 64%) 100% 50% /
+      0.55rem 0.55rem no-repeat;
 }
 
 ::selection {

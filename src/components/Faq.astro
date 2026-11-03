@@ -1,0 +1,76 @@
+---
+import { FAQ_ITEMS } from '../lib/invitation';
+
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+---
+
+<section class="invitation-section" id="faq" aria-labelledby="faq-heading">
+  <div class="container invitation-stack">
+    <p class="eyebrow" data-reveal>{t('faq.eyebrow')}</p>
+    <h2 class="section-heading" id="faq-heading" data-reveal>
+      {t('faq.heading')}
+    </h2>
+    <div class="faq__list" data-reveal>
+      {
+        FAQ_ITEMS.map((id) => (
+          <details class="faq__item">
+            <summary class="faq__question">{t(`faq.${id}.q`)}</summary>
+            <p class="faq__answer detail-note">{t(`faq.${id}.a`)}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq__list {
+    width: 100%;
+    max-width: 46rem;
+    border-top: var(--hairline);
+  }
+
+  .faq__item {
+    border-bottom: var(--hairline);
+  }
+
+  .faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    min-height: 44px;
+    padding-block: var(--space-md);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    line-height: 1.3;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__question::after {
+    content: '+';
+    flex-shrink: 0;
+    font-family: var(--font-body);
+    font-weight: 500;
+    color: var(--amp);
+    transition: rotate 220ms var(--ease-editorial);
+  }
+
+  .faq__item[open] .faq__question::after {
+    rotate: 45deg;
+  }
+
+  .faq__answer {
+    max-width: var(--measure);
+    padding-bottom: var(--space-md);
+  }
+</style>

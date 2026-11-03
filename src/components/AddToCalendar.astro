@@ -31,7 +31,7 @@ const icsUrl = withBase('/wedding.ics');
 <div class="atc" data-atc>
   <button
     type="button"
-    class="atc__button"
+    class="button atc__button"
     aria-haspopup="menu"
     aria-expanded="false"
     aria-controls="atc-menu"
@@ -88,28 +88,14 @@ const icsUrl = withBase('/wedding.ics');
     display: inline-block;
   }
 
+  /* Colours, shape and type come from the shared .button, so it always
+     matches the RSVP button next to it. */
   .atc__button {
-    display: inline-flex;
-    align-items: center;
     gap: 0.6em;
-    padding: 0.75em 1.4em;
-    background: var(--accent);
-    color: var(--bg);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius);
-    font-family: var(--font-body);
-    font-size: var(--step--1);
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     cursor: pointer;
     transition:
       background 160ms var(--ease-editorial),
       transform 160ms var(--ease-editorial);
-  }
-
-  .atc__button:hover {
-    background: var(--accent-ink);
   }
 
   .atc__button:active {

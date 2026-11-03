@@ -1,0 +1,186 @@
+---
+// Romania by county: Pati's Sălaj and Cos's Mureș, joined by dotted paths
+// that meet in a heart over Cluj-Napoca, where they met.
+// Geometry: src/data/romania-counties.json, projected and simplified from the
+// click_that_hood Romania GeoJSON (codeforgermany/click_that_hood).
+import map from '../data/romania-counties.json';
+
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+const HIGHLIGHT: Record<string, string> = {
+  salaj: 'story-map__county--pati',
+  mures: 'story-map__county--cos',
+  cluj: 'story-map__county--met',
+};
+const centre = (id: string) => map.counties.find((c) => c.id === id)!.c;
+const [hx, hy] = map.clujNapoca;
+const [px, py] = centre('salaj');
+const [cx, cy] = centre('mures');
+// Both paths arc upwards into the heart, like the two halves of its top.
+const toHeart = (x: number, y: number, bend: number) =>
+  `M${x},${y} Q${(x + hx) / 2 + bend},${Math.min(y, hy) - 46} ${hx},${hy - 6}`;
+const paths = [toHeart(px, py, -8), toHeart(cx, cy, 10)];
+---
+
+<figure class="story-map" data-reveal>
+  <svg
+    class="story-map__svg"
+    viewBox={`0 0 ${map.width} ${map.height}`}
+    role="img"
+    aria-label={t('story.map.label')}
+  >
+    <defs>
+      <mask id="story-map-draw" maskUnits="userSpaceOnUse">
+        {
+          paths.map((d) => (
+            <path class="story-map__reveal" d={d} pathLength="1" />
+          ))
+        }
+      </mask>
+    </defs>
+    <g class="story-map__counties" aria-hidden="true">
+      {
+        map.counties.map(({ id, d }) => (
+          <path class:list={['story-map__county', HIGHLIGHT[id]]} d={d} />
+        ))
+      }
+    </g>
+    <g mask="url(#story-map-draw)" aria-hidden="true">
+      {paths.map((d) => <path class="story-map__route" d={d} />)}
+    </g>
+    <circle class="story-map__home story-map__home--pati" cx={px} cy={py} r="7"
+    ></circle>
+    <circle class="story-map__home story-map__home--cos" cx={cx} cy={cy} r="7"
+    ></circle>
+    <g
+      class="story-map__heart"
+      transform={`translate(${hx} ${hy})`}
+      aria-hidden="true"
+    >
+      <path
+        d="M0,21C-29.4,0 -33.6,-21 -16.8,-27.3C-6.3,-31.5 0,-23.1 0,-16.8C0,-23.1 6.3,-31.5 16.8,-27.3C33.6,-21 29.4,0 0,21Z"
+      ></path>
+    </g>
+  </svg>
+</figure>
+
+<style>
+  .story-map {
+    --pati: var(--accent);
+    --cos: var(--dot-3);
+    --met: var(--frame);
+    --heart: var(--dot-1);
+
+    width: 100%;
+    max-width: 46rem;
+    margin: 0 auto;
+  }
+
+  .story-map__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .story-map__county {
+    fill: var(--bg-sink);
+    stroke: var(--bg);
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+  }
+
+  .story-map__county--pati {
+    fill: var(--pati);
+  }
+
+  .story-map__county--cos {
+    fill: var(--cos);
+  }
+
+  .story-map__county--met {
+    fill: var(--met);
+  }
+
+  .story-map__route {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-dasharray: 0.1 10;
+  }
+
+  .story-map__reveal {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 12;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .story-map__home {
+    fill: var(--bg);
+    stroke-width: 4;
+  }
+
+  .story-map__home--pati {
+    stroke: var(--pati);
+  }
+
+  .story-map__home--cos {
+    stroke: var(--cos);
+  }
+
+  .story-map__heart {
+    fill: var(--heart);
+    stroke: var(--bg);
+    stroke-width: 3;
+    stroke-linejoin: round;
+  }
+
+  .story-map__heart path {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* On reveal the paths draw from each hometown, then the heart beats once. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .story-map .story-map__reveal {
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 1400ms var(--ease-editorial) 300ms;
+    }
+
+    :global(html.js) .story-map.is-visible .story-map__reveal {
+      stroke-dashoffset: 0;
+    }
+
+    :global(html.js) .story-map .story-map__heart path {
+      transform: scale(0);
+    }
+
+    /* No fill-forwards: once the beat ends the heart has no transform left,
+       so the browser repaints it as crisp vector instead of a scaled bitmap. */
+    :global(html.js) .story-map.is-visible .story-map__heart path {
+      transform: none;
+      animation: story-map-beat 900ms var(--ease-editorial) 1400ms backwards;
+    }
+  }
+
+  @keyframes story-map-beat {
+    0% {
+      transform: scale(0);
+    }
+    55% {
+      transform: scale(1.25);
+    }
+    75% {
+      transform: scale(0.92);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+</style>

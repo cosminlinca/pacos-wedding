@@ -80,30 +80,27 @@ node scripts/make-ics.mjs
 
 ---
 
-## The photo
+## The photos
 
-The engagement photo lives at [`src/assets/couple-path.jpg`](./src/assets/couple-path.jpg)
-(900 × 1600, portrait) and is used twice, on purpose:
+The engagement photo [`src/assets/couple-path.jpg`](./src/assets/couple-path.jpg)
+is the hero background: heavily blurred, desaturated and veiled by the ivory
+scrim, so it reads as warm texture behind the names. To swap it, change the
+one `import` in [`Hero.astro`](./src/components/Hero.astro).
 
-- **Hero background** — heavily blurred, desaturated and veiled by the ivory
-  scrim, so it reads as warm texture behind the names rather than as a picture.
-  Encoded at `quality={45}` and max 720 px wide; the blur hides everything the
-  low bitrate costs.
-- **Our story preview** ([`src/components/OurStory.astro`](./src/components/OurStory.astro))
-  — the same frame shown in its native 9:16 until the timeline photos arrive.
+Story photos live in `src/assets/story/<id>/`. Each one gets alt text built
+from its chapter title (`story.gallery.alt`, e.g. "… — photo 2 of 5"), and
+opens full size in a photo viewer (arrows, keyboard, swipe). Without
+JavaScript the photos are plain links to the full-size image.
 
-`astro:assets` emits WebP with a `srcset` for both.
+## FAQ and after the wedding
 
-### Swap it for another photo
-
-Drop the new file in `src/assets/` and change the one `import` in each of
-[`Hero.astro`](./src/components/Hero.astro) and
-[`OurStory.astro`](./src/components/OurStory.astro). A portrait (2:3 / 9:16)
-shot keeps the preview layout as designed; for a landscape shot, change the
-preview's `Figure` ratio too.
-
-Preview copy remains in `portrait.*`; the section heading and timeline copy
-live in `story.*` in the two i18n files.
+- FAQ entries are listed in `FAQ_ITEMS` in
+  [`src/lib/invitation.ts`](./src/lib/invitation.ts); the text is
+  `faq.<id>.q` / `faq.<id>.a` in both JSON files. The answers are draft
+  wording; several say "to be confirmed" until you decide.
+- On the wedding day the countdown shows `countdown.passed`; from the next day
+  it shows `countdown.thanks`. Set `GALLERY_URL` in `invitation.ts` to add a
+  link to the shared photo album under the thank-you note.
 
 ### Motion on this page
 
@@ -167,9 +164,9 @@ public/            favicon.svg · og-image.png · wedding.ics · robots.txt
 scripts/           check-i18n.mjs · make-ics.mjs · make-og.mjs
 src/
   layouts/Base.astro         <head>, meta, hreflang, fonts, skip-link, reveal observer
-  assets/couple-path.jpg     the engagement photo
+  assets/                    couple-path.jpg (hero) · story/<id>/*.jpg · venue photo
   components/                 Header · Hero · OurStory · Schedule · Venue ·
-                              Rsvp · RsvpButton · Countdown ·
+                              Rsvp · Faq · RsvpButton · Countdown ·
                               AddToCalendar · Figure · Footer · ScrollCue ·
                               LangToggle · HomePage
   i18n/{ro,en}.json           all copy (flat keys)

@@ -17,7 +17,9 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
   <div class="container site-header__inner">
     <a class="monogram" href={homeHref} aria-label={t('hero.names')}>
       <span aria-hidden="true">P</span>
+      <span class="dotted__dot" aria-hidden="true"></span>
       <span class="couple-amp" aria-hidden="true">&amp;</span>
+      <span class="dotted__dot" aria-hidden="true"></span>
       <span aria-hidden="true">C</span>
     </a>
     <nav class="site-header__nav" aria-label={t('nav.sections')}>
@@ -43,7 +45,7 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
     z-index: 10;
     padding-block: var(--space-md);
     background: var(--bg);
-    border-bottom: var(--hairline);
+    border-bottom: 3px solid var(--frame);
   }
 
   .site-header__inner {
@@ -60,8 +62,7 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
     justify-content: center;
     gap: 0.12em;
     min-height: 44px;
-    font-family: var(--font-display);
-    font-optical-sizing: auto;
+    font-family: var(--font-names);
     font-weight: 400;
     font-size: var(--step-1);
     line-height: 1.1;
@@ -103,6 +104,7 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
   }
 
   .site-header__rsvp :global(.button) {
+    white-space: nowrap;
     padding: 0.65em 0.8em;
     letter-spacing: 0.06em;
   }
@@ -113,8 +115,10 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
       gap: var(--space-xl);
     }
 
+    /* The Friends lettering runs wide, so it stays a step below the old
+       serif monogram. */
     .monogram {
-      font-size: var(--step-2);
+      font-size: calc(var(--step-1) * 1.15);
     }
 
     .site-header__rsvp :global(.button) {
@@ -138,6 +142,7 @@ const homeHref = locale === 'ro' ? withBase('/') : withBase('/en/');
     }
 
     .site-header__nav a {
+      white-space: nowrap;
       display: inline-flex;
       align-items: center;
       min-height: 44px;

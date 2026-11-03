@@ -13,3 +13,10 @@ export const VENUE_PHOTO: ImageMetadata | undefined = venuePhoto;
 // Chapters in chronological order. Photos live in src/assets/story/<id>/ and
 // are shown in filename order; titles are the story.<id>.title i18n keys.
 export const STORY_CHAPTERS = ['1', '2', '3', '4'];
+
+// FAQ entries, in display order; copy lives in faq.<id>.q / faq.<id>.a.
+export const FAQ_ITEMS = ['rsvp', 'parking', 'dress', 'kids', 'travel', 'stay'];
+
+// After the wedding, set this to the shared photo album. The countdown turns
+// into a thank-you note the day after the wedding and links here if set.
+export const GALLERY_URL: string | undefined = undefined;
